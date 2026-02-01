@@ -1,0 +1,12 @@
+export { Terminal } from './Terminal';
+export { Finder } from './Finder';
+export { About } from './About';
+export { Projects } from './Projects';
+export { Skills } from './Skills';
+export { Experience } from './Experience';
+export { Contact } from './Contact';
+export { Resume } from './Resume';
+export { Settings } from './Settings';
+export { default as Spotify } from './Spotify';
+export { default as Journal } from './Journal';
+export { default as Camera } from './Camera';
