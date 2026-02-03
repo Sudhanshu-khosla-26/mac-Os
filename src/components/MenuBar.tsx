@@ -700,8 +700,7 @@ export function MenuBar({
         </div>
       </motion.div>
       {/* Lock Screen Overlay */}
-      /* Replace the "Lock Screen Overlay" section in your code with this
-      version */
+
       <AnimatePresence>
         {isLocked && (
           <motion.div
