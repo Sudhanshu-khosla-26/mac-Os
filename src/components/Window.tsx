@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import type { WindowState } from '@/types';
+import { useRef, useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { WindowState } from "@/types";
 
 interface WindowProps {
   window: WindowState;
@@ -37,29 +37,35 @@ export function Window({
     onFocus();
   }, [onFocus]);
 
-  const handleHeaderMouseDown = useCallback((e: React.MouseEvent) => {
-    if (win.isMaximized) return;
-    e.preventDefault();
-    setIsDragging(true);
-    dragStart.current = {
-      x: e.clientX,
-      y: e.clientY,
-      windowX: win.position.x,
-      windowY: win.position.y,
-    };
-  }, [win.position.x, win.position.y, win.isMaximized]);
+  const handleHeaderMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (win.isMaximized) return;
+      e.preventDefault();
+      setIsDragging(true);
+      dragStart.current = {
+        x: e.clientX,
+        y: e.clientY,
+        windowX: win.position.x,
+        windowY: win.position.y,
+      };
+    },
+    [win.position.x, win.position.y, win.isMaximized],
+  );
 
-  const handleResizeMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsResizing(true);
-    resizeStart.current = {
-      x: e.clientX,
-      y: e.clientY,
-      width: win.size.width,
-      height: win.size.height,
-    };
-  }, [win.size.width, win.size.height]);
+  const handleResizeMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsResizing(true);
+      resizeStart.current = {
+        x: e.clientX,
+        y: e.clientY,
+        width: win.size.width,
+        height: win.size.height,
+      };
+    },
+    [win.size.width, win.size.height],
+  );
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -75,8 +81,14 @@ export function Window({
         const deltaX = e.clientX - resizeStart.current.x;
         const deltaY = e.clientY - resizeStart.current.y;
         onSizeChange({
-          width: Math.max(win.minSize.width, resizeStart.current.width + deltaX),
-          height: Math.max(win.minSize.height, resizeStart.current.height + deltaY),
+          width: Math.max(
+            win.minSize.width,
+            resizeStart.current.width + deltaX,
+          ),
+          height: Math.max(
+            win.minSize.height,
+            resizeStart.current.height + deltaY,
+          ),
         });
       }
     };
@@ -87,49 +99,56 @@ export function Window({
     };
 
     if (isDragging || isResizing) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
       return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [isDragging, isResizing, onPositionChange, onSizeChange, win.minSize.width, win.minSize.height]);
+  }, [
+    isDragging,
+    isResizing,
+    onPositionChange,
+    onSizeChange,
+    win.minSize.width,
+    win.minSize.height,
+  ]);
 
   return (
     <AnimatePresence>
       {!win.isMinimized && (
         <motion.div
           ref={windowRef}
-          initial={{ 
-            opacity: 0, 
-            scale: 0.85, 
+          initial={{
+            opacity: 0,
+            scale: 0.85,
             y: 50,
           }}
-          animate={{ 
-            opacity: 1, 
-            scale: win.isMaximized ? 1 : 1, 
-            y: 0,
+          animate={{
+            opacity: 1,
+            scale: win.isMaximized ? 1 : 1,
+            y: win.position.y,
             x: win.position.x,
             width: win.size.width,
             height: win.size.height,
           }}
-          exit={{ 
-            opacity: 0, 
+          exit={{
+            opacity: 0,
             scale: 0.9,
             y: 20,
-            transition: { duration: 0.2 }
+            transition: { duration: 0.2 },
           }}
-          transition={{ 
-            type: 'spring',
+          transition={{
+            type: "spring",
             stiffness: 400,
             damping: 30,
             mass: 0.8,
           }}
           style={{
-            position: 'absolute',
+            position: "absolute",
             zIndex: win.zIndex,
-            top: win.position.y,
+            // top: win.position.y,
           }}
           className="rounded-xl overflow-hidden"
           onMouseDown={handleMouseDown}
@@ -137,35 +156,44 @@ export function Window({
           {/* Window Frame */}
           <div
             className={`w-full h-full flex flex-col ${
-              isDark 
-                ? 'bg-[#1e1e1e]' 
-                : 'bg-white'
+              isDark ? "bg-[#1e1e1e]" : "bg-white"
             }`}
             style={{
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: `1px solid ${isActive 
-                ? (isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)') 
-                : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)')
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: `1px solid ${
+                isActive
+                  ? isDark
+                    ? "rgba(255,255,255,0.15)"
+                    : "rgba(0,0,0,0.1)"
+                  : isDark
+                    ? "rgba(255,255,255,0.05)"
+                    : "rgba(0,0,0,0.05)"
               }`,
               boxShadow: isActive
-                ? (isDark 
-                  ? '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 0 30px rgba(0,0,0,0.3)'
-                  : '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8) inset')
-                : (isDark 
-                  ? '0 10px 30px -10px rgba(0, 0, 0, 0.5)'
-                  : '0 10px 30px -10px rgba(0, 0, 0, 0.15)'),
+                ? isDark
+                  ? "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 0 30px rgba(0,0,0,0.3)"
+                  : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8) inset"
+                : isDark
+                  ? "0 10px 30px -10px rgba(0, 0, 0, 0.5)"
+                  : "0 10px 30px -10px rgba(0, 0, 0, 0.15)",
             }}
           >
             {/* Title Bar */}
             <div
               className={`h-10 flex items-center px-4 select-none flex-shrink-0 ${
-                isDark 
-                  ? 'bg-gradient-to-b from-[#2d2d2d] to-[#252525]' 
-                  : 'bg-gradient-to-b from-[#f0f0f0] to-[#e8e8e8]'
+                isDark
+                  ? "bg-gradient-to-b from-[#2d2d2d] to-[#252525]"
+                  : "bg-gradient-to-b from-[#f0f0f0] to-[#e8e8e8]"
               }`}
               onMouseDown={handleHeaderMouseDown}
-              style={{ cursor: isDragging ? 'grabbing' : win.isMaximized ? 'default' : 'grab' }}
+              style={{
+                cursor: isDragging
+                  ? "grabbing"
+                  : win.isMaximized
+                    ? "default"
+                    : "grab",
+              }}
             >
               {/* Traffic Lights */}
               <div className="flex items-center gap-2">
@@ -175,10 +203,19 @@ export function Window({
                     onClose();
                   }}
                   className="w-3 h-3 rounded-full bg-[#ff5f57] hover:bg-[#ff5f57] flex items-center justify-center group transition-all"
-                  style={{ boxShadow: 'inset 0 0 0 0.5px rgba(0,0,0,0.1)' }}
+                  style={{ boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.1)" }}
                 >
-                  <svg className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 8 8" fill="none">
-                    <path d="M2 2L6 6M6 2L2 6" stroke="#4a0000" strokeWidth="1.2" strokeLinecap="round"/>
+                  <svg
+                    className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                  >
+                    <path
+                      d="M2 2L6 6M6 2L2 6"
+                      stroke="#4a0000"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
                 <button
@@ -187,10 +224,19 @@ export function Window({
                     onMinimize();
                   }}
                   className="w-3 h-3 rounded-full bg-[#febc2e] hover:bg-[#febc2e] flex items-center justify-center group transition-all"
-                  style={{ boxShadow: 'inset 0 0 0 0.5px rgba(0,0,0,0.1)' }}
+                  style={{ boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.1)" }}
                 >
-                  <svg className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 8 8" fill="none">
-                    <path d="M1 4H7" stroke="#995700" strokeWidth="1.2" strokeLinecap="round"/>
+                  <svg
+                    className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 4H7"
+                      stroke="#995700"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
                 <button
@@ -199,19 +245,31 @@ export function Window({
                     onMaximize();
                   }}
                   className="w-3 h-3 rounded-full bg-[#28c840] hover:bg-[#28c840] flex items-center justify-center group transition-all"
-                  style={{ boxShadow: 'inset 0 0 0 0.5px rgba(0,0,0,0.1)' }}
+                  style={{ boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.1)" }}
                 >
-                  <svg className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 8 8" fill="none">
-                    <path d="M2 4L4 2L6 4M4 2V6" stroke="#004d00" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                  >
+                    <path
+                      d="M2 4L4 2L6 4M4 2V6"
+                      stroke="#004d00"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
 
               {/* Title */}
               <div className="flex-1 text-center">
-                <span className={`text-sm font-medium ${
-                  isDark ? 'text-white/90' : 'text-gray-700'
-                }`}>
+                <span
+                  className={`text-sm font-medium ${
+                    isDark ? "text-white/90" : "text-gray-700"
+                  }`}
+                >
                   {win.title}
                 </span>
               </div>
@@ -221,9 +279,7 @@ export function Window({
             </div>
 
             {/* Content - Fixed to not shrink */}
-            <div className="flex-1 overflow-auto min-h-0">
-              {children}
-            </div>
+            <div className="flex-1 overflow-auto min-h-0">{children}</div>
 
             {/* Resize Handle */}
             {!win.isMaximized && (
@@ -236,7 +292,7 @@ export function Window({
                   height="14"
                   viewBox="0 0 14 14"
                   className={`absolute bottom-1.5 right-1.5 ${
-                    isDark ? 'text-white/20' : 'text-black/20'
+                    isDark ? "text-white/20" : "text-black/20"
                   }`}
                 >
                   <path

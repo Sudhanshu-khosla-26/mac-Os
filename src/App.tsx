@@ -310,7 +310,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen overflow-hidden"
+      className="min-h-screen max-h-screen overflow-hidden"
       style={{
         backgroundImage: "url('/macbook-m3.jpg')",
         backgroundSize: "cover",
@@ -340,7 +340,7 @@ function App() {
       />
 
       {/* Desktop Area */}
-      <div className="relative w-full h-screen pt-8 pb-20">
+      <div className="relative w-full h-screen pt-0 pb-20">
         {/* Desktop Icons */}
         <Desktop
           icons={DESKTOP_ICONS}

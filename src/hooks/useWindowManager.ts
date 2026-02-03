@@ -16,13 +16,7 @@ export const INITIAL_APPS: App[] = [
     color: "#34c759",
     isOpen: false,
   },
-  {
-    id: "about",
-    name: "About Me",
-    icon: "Finder.png",
-    color: "#ff9500",
-    isOpen: false,
-  },
+
   {
     id: "gallery",
     name: "Photos",
@@ -30,27 +24,7 @@ export const INITIAL_APPS: App[] = [
     color: "#ff9500",
     isOpen: false,
   },
-  {
-    id: "projects",
-    name: "Projects",
-    icon: "Finder.png",
-    color: "#af52de",
-    isOpen: false,
-  },
-  {
-    id: "skills",
-    name: "Skills",
-    icon: "Finder.png",
-    color: "#ff3b30",
-    isOpen: false,
-  },
-  {
-    id: "experience",
-    name: "Experience",
-    icon: "Finder.png",
-    color: "#5ac8fa",
-    isOpen: false,
-  },
+
   {
     id: "contact",
     name: "Contact",
@@ -79,13 +53,7 @@ export const INITIAL_APPS: App[] = [
     color: "#1db954",
     isOpen: false,
   },
-  {
-    id: "resume",
-    name: "Resume",
-    icon: "PDF.png",
-    color: "#1db954",
-    isOpen: false,
-  },
+
   {
     id: "journal",
     name: "Journal",
@@ -98,6 +66,41 @@ export const INITIAL_APPS: App[] = [
     name: "Camera",
     icon: "Camera.png",
     color: "#8e8e93",
+    isOpen: false,
+  },
+  {
+    id: "resume",
+    name: "Resume",
+    icon: "PDF.png",
+    color: "#1db954",
+    isOpen: false,
+  },
+  {
+    id: "about",
+    name: "About Me",
+    icon: "Folder.png",
+    color: "#ff9500",
+    isOpen: false,
+  },
+  {
+    id: "projects",
+    name: "Projects",
+    icon: "Folder.png",
+    color: "#af52de",
+    isOpen: false,
+  },
+  {
+    id: "skills",
+    name: "Skills",
+    icon: "Folder.png",
+    color: "#ff3b30",
+    isOpen: false,
+  },
+  {
+    id: "experience",
+    name: "Experience",
+    icon: "Folder.png",
+    color: "#5ac8fa",
     isOpen: false,
   },
 ];
@@ -114,10 +117,10 @@ const createWindowState = (app: App, zIndex: number): WindowState => {
     resume: { width: 900, height: 500 },
     contact: { width: 800, height: 500 },
     settings: { width: 700, height: 500 },
-    spotify: { width: 900, height: 600 },
-    youtube: { width: 1100, height: 600 },
-    journal: { width: 900, height: 600 },
-    camera: { width: 700, height: 550 },
+    spotify: { width: 850, height: 500 },
+    youtube: { width: 1100, height: 500 },
+    journal: { width: 900, height: 500 },
+    camera: { width: 600, height: 500 },
   };
 
   const size = defaultSizes[app.id] || { width: 600, height: 400 };
@@ -250,7 +253,7 @@ export function useWindowManager() {
           };
         }
         // Full screen without any gaps
-        const menuBarHeight = 28;
+        const menuBarHeight = 0;
         return {
           ...w,
           isMaximized: true,

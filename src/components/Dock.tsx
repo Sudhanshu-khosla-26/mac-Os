@@ -157,7 +157,7 @@ export function Dock({ items, onItemClick, isDark }: DockProps) {
               : "0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.5) inset",
           }}
         >
-          {items.map((item) => (
+          {items.slice(0, 9).map((item) => (
             <div
               key={item.id}
               className="dock-app relative group flex flex-col items-center"
