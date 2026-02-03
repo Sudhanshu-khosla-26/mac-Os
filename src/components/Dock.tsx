@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import * as LucideIcons from "lucide-react";
 
 interface DockItem {
   id: string;
@@ -17,103 +16,156 @@ interface DockProps {
   isDark: boolean;
 }
 
+const maxAdditionalSize = 5;
+
 export function Dock({ items, onItemClick, isDark }: DockProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
 
-  // More realistic macOS-like scaling - subtle and smooth
-  const getScale = (index: number) => {
-    if (hoveredIndex === null) return 1;
-    const distance = Math.abs(index - hoveredIndex);
-    if (distance === 0) return 1.5; // Center item
-    if (distance === 1) return 1.25; // Adjacent items
-    if (distance === 2) return 1.1; // Next adjacent
-    return 1;
-  };
+  const handleAppHover = (ev: React.MouseEvent<HTMLDivElement>) => {
+    if (!dockRef.current) return;
 
-  // Y-axis movement for bounce effect
-  const getY = (index: number) => {
-    if (hoveredIndex === null) return 0;
-    const distance = Math.abs(index - hoveredIndex);
-    if (distance === 0) return -12;
-    if (distance === 1) return -6;
-    if (distance === 2) return -2;
-    return 0;
-  };
+    const mousePosition = ev.clientX;
+    const iconPositionLeft = ev.currentTarget.getBoundingClientRect().left;
+    const iconWidth = ev.currentTarget.getBoundingClientRect().width;
 
-  // Calculate horizontal offset to prevent overlap
-  const getX = (index: number) => {
-    if (hoveredIndex === null) return 0;
+    const cursorDistance = (mousePosition - iconPositionLeft) / iconWidth;
 
-    let offset = 0;
-    const direction = index > hoveredIndex ? 1 : -1;
-    const distance = Math.abs(index - hoveredIndex);
+    // Scale value function
+    const scaleValue = (
+      inputValue: number,
+      inputRange: [number, number],
+      outputRange: [number, number],
+    ) => {
+      const [inputMin, inputMax] = inputRange;
+      const [outputMin, outputMax] = outputRange;
 
-    if (distance === 0) return 0;
+      const clampedInput = Math.min(Math.max(inputValue, inputMin), inputMax);
+      const normalizedInput = (clampedInput - inputMin) / (inputMax - inputMin);
+      return outputMin + normalizedInput * (outputMax - outputMin);
+    };
 
-    // Push items away from hovered item
-    if (distance === 1) offset = 12 * direction;
-    if (distance === 2) offset = 6 * direction;
+    const offsetPixels = scaleValue(
+      cursorDistance,
+      [0, 1],
+      [maxAdditionalSize * -1, maxAdditionalSize],
+    );
 
-    return offset;
-  };
+    dockRef.current.style.setProperty(
+      "--dock-offset-left",
+      `${offsetPixels * -1}px`,
+    );
 
-  const getIconComponent = (iconName: string) => {
-    const Icon = (LucideIcons as any)[iconName];
-    return Icon || LucideIcons.Circle;
+    dockRef.current.style.setProperty(
+      "--dock-offset-right",
+      `${offsetPixels}px`,
+    );
   };
 
   return (
-    <motion.div
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        duration: 0.7,
-        delay: 0.8,
-        ease: [0.68, -0.55, 0.265, 1.55],
-      }}
-      className="fixed bottom-4 inset-x-0 mx-auto w-fit z-[999]"
-    >
-      <div
-        ref={dockRef}
-        className={`flex items-end justify-center gap-1 px-3 pb-2 pt-3 rounded-2xl ${
-          isDark ? "bg-[#1e1e1e]/70" : "bg-white/70"
-        }`}
-        style={{
-          backdropFilter: "blur(25px) saturate(180%)",
-          WebkitBackdropFilter: "blur(25px) saturate(180%)",
-          border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          boxShadow: isDark
-            ? "0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05) inset"
-            : "0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.5) inset",
-        }}
-      >
-        {items.map((item, index) => {
-          const Icon = getIconComponent(item.icon);
-          const scale = getScale(index);
-          const y = getY(index);
-          const x = getX(index);
+    <>
+      <style>{`
+        .dock-app {
+          width: 60px;
+          height: 60px;
+          transition: width 100ms cubic-bezier(0.25, 1, 0.5, 1),
+                      height 100ms cubic-bezier(0.25, 1, 0.5, 1),
+                      margin-top 100ms cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
-          return (
-            <motion.div
+        .dock-app:hover {
+          width: 90px;
+          height: 90px;
+          margin-top: -30px;
+        }
+
+        /* Right side neighbors */
+        .dock-app:hover + .dock-app {
+          width: calc(80px + var(--dock-offset-right, 0px));
+          height: calc(80px + var(--dock-offset-right, 0px));
+          margin-top: calc(-20px + var(--dock-offset-right, 0px) * -1);
+        }
+
+        .dock-app:hover + .dock-app + .dock-app {
+          width: calc(70px + var(--dock-offset-right, 0px));
+          height: calc(70px + var(--dock-offset-right, 0px));
+          margin-top: calc(-10px + var(--dock-offset-right, 0px) * -1);
+        }
+
+        /* Left side neighbors */
+        .dock-app:has(+ .dock-app:hover) {
+          width: calc(80px + var(--dock-offset-left, 0px));
+          height: calc(80px + var(--dock-offset-left, 0px));
+          margin-top: calc(-20px + var(--dock-offset-left, 0px) * -1);
+        }
+
+        .dock-app:has(+ .dock-app + .dock-app:hover) {
+          width: calc(70px + var(--dock-offset-left, 0px));
+          height: calc(70px + var(--dock-offset-left, 0px));
+          margin-top: calc(-10px + var(--dock-offset-left, 0px) * -1);
+        }
+
+        .dock-icon-button {
+          transition: transform 100ms ease;
+        }
+
+        .dock-icon-button:active {
+          transform: scale(0.95);
+        }
+
+        .dock-tooltip {
+          transition: opacity 100ms ease-in;
+        }
+
+        @keyframes dock-bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+
+        .dock-app:active {
+          animation: dock-bounce 300ms ease-in-out;
+        }
+      `}</style>
+
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          duration: 0.7,
+          delay: 0.8,
+          ease: [0.68, -0.55, 0.265, 1.55],
+        }}
+        className="fixed bottom-4 inset-x-0 mx-auto w-fit z-[999]"
+      >
+        <div
+          ref={dockRef}
+          className="flex items-end justify-center px-3 pb-2 pt-3 rounded-2xl"
+          style={{
+            background: isDark
+              ? "linear-gradient(to bottom, rgba(30, 30, 30, 0.6), rgba(30, 30, 30, 0.8))"
+              : "linear-gradient(to bottom, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07))",
+            backdropFilter: "blur(25px) saturate(180%)",
+            WebkitBackdropFilter: "blur(25px) saturate(180%)",
+            border: `1px solid ${
+              isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
+            }`,
+            boxShadow: isDark
+              ? "0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05) inset"
+              : "0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.5) inset",
+          }}
+        >
+          {items.map((item, index) => (
+            <div
               key={item.id}
-              className="relative group flex flex-col items-center"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              animate={{
-                scale,
-                y,
-                x,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-              }}
+              className="dock-app relative group flex flex-col items-center"
+              onMouseMove={handleAppHover}
             >
-              {/* Tooltip - centered above icon */}
+              {/* Tooltip */}
               <div
-                className={`absolute -top-10 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none ${
+                className={`dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none ${
                   isDark ? "bg-[#2a2a2a] text-white" : "bg-white text-gray-900"
                 }`}
                 style={{
@@ -126,17 +178,14 @@ export function Dock({ items, onItemClick, isDark }: DockProps) {
               {/* Icon Button */}
               <button
                 onClick={() => onItemClick(item.id)}
-                className="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200"
-                // style={{
-                //   background: item.color || (isDark ? "#2a2a2a" : "#e5e5e5"),
-                // }}
+                className="dock-icon-button relative w-full h-full rounded-xl flex items-center justify-center"
               >
                 <img
-                  src={`/Icons/${item.icon}.png`}
-                  alt=""
-                  className="w-12 h-12 text-white"
+                  src={`/Icons/${item.icon}`}
+                  alt={item.name}
+                  className="w-full h-full object-contain pointer-events-none"
+                  draggable="false"
                 />
-                {/* >                <Icon className="w-6 h-6 text-white" strokeWidth={1.5} /> */}
               </button>
 
               {/* Open Indicator Dot */}
@@ -152,10 +201,10 @@ export function Dock({ items, onItemClick, isDark }: DockProps) {
                   }}
                 />
               )}
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </>
   );
 }

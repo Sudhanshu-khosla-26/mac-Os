@@ -18,7 +18,9 @@ import {
   Settings,
   Spotify,
   Journal,
+  Gallery,
   Camera,
+  Youtube,
 } from "@/components/apps";
 import { useWindowManager } from "@/hooks/useWindowManager";
 import { useSpotlight } from "@/hooks/useSpotlight";
@@ -26,27 +28,36 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Desktop icons configuration
 const DESKTOP_ICONS = [
-  { id: "about", name: "About Me", icon: "User", position: { x: 20, y: 20 } },
+  {
+    id: "about",
+    name: "About Me",
+    icon: "Folder.png",
+    position: { x: 20, y: 20 },
+  },
   {
     id: "projects",
     name: "Projects",
-    icon: "Briefcase",
+    icon: "Folder.png",
     position: { x: 20, y: 120 },
   },
-  { id: "skills", name: "Skills", icon: "Zap", position: { x: 20, y: 220 } },
+  {
+    id: "skills",
+    name: "Skills",
+    icon: "Folder.png",
+    position: { x: 20, y: 220 },
+  },
   {
     id: "experience",
     name: "Experience",
-    icon: "Building2",
+    icon: "Folder.png",
     position: { x: 20, y: 320 },
   },
   {
     id: "resume",
     name: "Resume",
-    icon: "FileText",
+    icon: "PDF.png",
     position: { x: 20, y: 420 },
   },
-  { id: "contact", name: "Contact", icon: "Mail", position: { x: 20, y: 520 } },
 ];
 
 function App() {
@@ -264,6 +275,8 @@ function App() {
           return <Finder isDark={isDark} />;
         case "about":
           return <About isDark={isDark} />;
+        case "gallery":
+          return <Gallery isDark={isDark} />;
         case "projects":
           return <Projects isDark={isDark} />;
         case "skills":
@@ -278,6 +291,8 @@ function App() {
           return <Settings isDark={isDark} onToggleTheme={toggleTheme} />;
         case "spotify":
           return <Spotify isDark={isDark} />;
+        case "youtube":
+          return <Youtube isDark={isDark} />;
         case "journal":
           return <Journal isDark={isDark} />;
         case "camera":
@@ -307,7 +322,9 @@ function App() {
       <div
         className="fixed inset-0"
         style={{
-          backgroundColor: isDark ? "rgba(0,0,0,0.3)" : "rgba(255,255,255,0.1)",
+          backgroundColor: isDark
+            ? "rgba(0,0,0,0.02)"
+            : "rgba(255,255,255,0.01)",
         }}
       />
 

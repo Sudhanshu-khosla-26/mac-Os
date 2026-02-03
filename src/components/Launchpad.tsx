@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, X } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 interface LaunchpadProps {
   isOpen: boolean;
@@ -11,11 +11,17 @@ interface LaunchpadProps {
   isDark: boolean;
 }
 
-export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: LaunchpadProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+export function Launchpad({
+  isOpen,
+  onClose,
+  apps,
+  onOpenApp,
+  isDark,
+}: LaunchpadProps) {
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredApps = apps.filter(app => 
-    app.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredApps = apps.filter((app) =>
+    app.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const getIconComponent = (iconName: string) => {
@@ -26,7 +32,7 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
   const handleAppClick = (appId: string) => {
     onOpenApp(appId);
     onClose();
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   return (
@@ -41,17 +47,17 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
           onClick={onClose}
         >
           {/* Blurred Background */}
-          <div 
+          <div
             className="absolute inset-0"
             style={{
-              backgroundImage: 'url(/wallpaper.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'blur(40px) brightness(0.7)',
-              transform: 'scale(1.1)',
+              backgroundImage: "url(/wallpaper.jpg)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(40px) brightness(0.7)",
+              transform: "scale(1.1)",
             }}
           />
-          
+
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/40" />
 
@@ -66,9 +72,11 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
           >
             {/* Search Bar */}
             <div className="mb-12 w-full max-w-md">
-              <div className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isDark ? 'bg-white/15' : 'bg-white/25'
-              }`}>
+              <div
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                  isDark ? "bg-white/15" : "bg-white/25"
+                }`}
+              >
                 <Search className="w-5 h-5 text-white/70" />
                 <input
                   type="text"
@@ -79,8 +87,8 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
                   autoFocus
                 />
                 {searchQuery && (
-                  <button 
-                    onClick={() => setSearchQuery('')}
+                  <button
+                    onClick={() => setSearchQuery("")}
                     className="p-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
                   >
                     <X className="w-4 h-4 text-white" />
@@ -93,16 +101,16 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-6 md:gap-8 max-w-5xl">
               {filteredApps.map((app, index) => {
                 const Icon = getIconComponent(app.icon);
-                
+
                 return (
                   <motion.button
                     key={app.id}
                     initial={{ opacity: 0, y: 20, scale: 0.8 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ 
+                    transition={{
                       delay: index * 0.03,
                       duration: 0.3,
-                      ease: [0.16, 1, 0.3, 1]
+                      ease: [0.16, 1, 0.3, 1],
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
@@ -110,16 +118,20 @@ export function Launchpad({ isOpen, onClose, apps, onOpenApp, isDark }: Launchpa
                     className="flex flex-col items-center gap-2 group"
                   >
                     {/* App Icon */}
-                    <div 
+                    <div
                       className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:shadow-2xl"
-                      style={{ 
-                        background: app.color,
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                      style={{
+                        // background: app.color,
+                        boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
                       }}
                     >
-                      <Icon className="w-10 h-10 md:w-12 md:h-12 text-white" strokeWidth={1.5} />
+                      <img src={`/Icons/${app.icon}`} alt={app.name} />
+                      <Icon
+                        className="w-10 h-10 md:w-12 md:h-12 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
-                    
+
                     {/* App Name */}
                     <span className="text-white text-sm font-medium text-center drop-shadow-lg">
                       {app.name}

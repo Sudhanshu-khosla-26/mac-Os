@@ -401,7 +401,7 @@ export function Terminal({ isDark }: TerminalProps) {
       case "resume":
         // Trigger download
         const link = document.createElement("a");
-        link.href = "/resume.pdf";
+        link.href = "/SUDHANSHU-KHOSLA-RESUME.pdf";
         link.download = "Sudhanshu_Khosla_Resume.pdf";
         link.click();
         return [

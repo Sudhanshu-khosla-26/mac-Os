@@ -13,12 +13,7 @@ interface AboutProps {
   isDark: boolean;
 }
 
-import {
-  HeroSection,
-  MacOSHero,
-  ParticleHero,
-  GeometricHero,
-} from "./HeroSection";
+import { MacOSHero } from "./HeroSection";
 
 const SOCIAL_LINKS = [
   {

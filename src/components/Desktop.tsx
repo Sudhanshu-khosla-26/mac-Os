@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
+import { motion } from "framer-motion";
+import * as LucideIcons from "lucide-react";
 
 interface DesktopIcon {
   id: string;
@@ -25,37 +25,40 @@ export function Desktop({ icons, onIconClick, isDark }: DesktopProps) {
       <div className="relative w-full h-full">
         {icons.map((icon, index) => {
           const Icon = getIconComponent(icon.icon);
-          
+
           return (
             <motion.button
               key={icon.id}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
+              transition={{
                 delay: 0.5 + index * 0.1,
-                type: 'spring',
+                type: "spring",
                 stiffness: 300,
                 damping: 20,
               }}
               onClick={() => onIconClick(icon.id)}
-              className="absolute flex flex-col items-center gap-1 p-2 rounded-lg pointer-events-auto group"
+              className="absolute flex flex-col items-center gap-1 p-2 rounded-lg  hover:bg-[#007aff]/30 pointer-events-auto group"
               style={{
                 left: icon.position.x,
                 top: icon.position.y,
               }}
             >
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                isDark 
-                  ? 'bg-[#007aff]/20 group-hover:bg-[#007aff]/30' 
-                  : 'bg-[#007aff]/10 group-hover:bg-[#007aff]/20'
-              }`}>
-                <Icon className="w-7 h-7 text-[#007aff]" />
+              <div
+                className={`w-14 h-14 rounded-xl flex items-center justify-center  transition-all duration-200 `}
+              >
+                <img
+                  className="w-10 h-10 text-[#007aff]"
+                  src={`/Icons/${icon.icon}`}
+                  alt={icon.name}
+                />
+                {/* <Icon className="w-7 h-7 text-[#007aff]" /> */}
               </div>
-              <span className={`text-xs text-center max-w-[80px] truncate px-1 rounded ${
-                isDark 
-                  ? 'text-white/80 group-hover:bg-[#007aff]/50' 
-                  : 'text-gray-700 group-hover:bg-[#007aff]/30'
-              }`}>
+              <span
+                className={`text-xs text-center max-w-[80px] truncate px-1 rounded ${
+                  isDark ? "text-white/80" : "text-white "
+                }`}
+              >
                 {icon.name}
               </span>
             </motion.button>
