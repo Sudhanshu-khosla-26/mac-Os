@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Webcam from "react-webcam";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Camera,
   RefreshCw,
   Image as ImageIcon,
   X,

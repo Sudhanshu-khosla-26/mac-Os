@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Loader2, ExternalLink } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 interface YoutubeProps {
   isDark: boolean;
