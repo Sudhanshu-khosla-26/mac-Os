@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import * as LucideIcons from "lucide-react";
 
 interface DesktopIcon {
   id: string;
@@ -15,17 +14,10 @@ interface DesktopProps {
 }
 
 export function Desktop({ icons, onIconClick, isDark }: DesktopProps) {
-  const getIconComponent = (iconName: string) => {
-    const Icon = (LucideIcons as any)[iconName];
-    return Icon || LucideIcons.Circle;
-  };
-
   return (
     <div className="fixed inset-0 pt-7 pb-24 px-4 pointer-events-none">
       <div className="relative w-full h-full">
         {icons.map((icon, index) => {
-          const Icon = getIconComponent(icon.icon);
-
           return (
             <motion.button
               key={icon.id}
