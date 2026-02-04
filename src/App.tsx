@@ -118,7 +118,7 @@ function App() {
       return;
     }
 
-    let hideTimeout: NodeJS.Timeout;
+    let hideTimeout: ReturnType<typeof setTimeout>;
 
     const handleMouseMove = (e: MouseEvent) => {
       const threshold = 100; // px from bottom - increased for better UX
