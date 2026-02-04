@@ -9,7 +9,6 @@ import {
   Terminal,
   Cpu,
   Menu,
-  X,
 } from "lucide-react";
 
 interface SkillsProps {
