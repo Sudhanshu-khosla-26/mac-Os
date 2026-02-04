@@ -253,7 +253,7 @@ export function useWindowManager() {
           };
         }
         // Full screen without any gaps
-        const menuBarHeight = 0;
+        const menuBarHeight = 15;
         return {
           ...w,
           isMaximized: true,

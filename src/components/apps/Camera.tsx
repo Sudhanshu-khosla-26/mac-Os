@@ -100,7 +100,7 @@ export default function CameraApp({ isDark }: CameraProps) {
 
   return (
     <div
-      className={`w-full h-full flex flex-col ${isDark ? "bg-black" : "bg-gray-100"}`}
+      className={`w-full h-full flex flex-col  ${isDark ? "bg-black" : "bg-gray-100"}`}
     >
       {/* Flash */}
       <AnimatePresence>

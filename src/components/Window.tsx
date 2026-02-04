@@ -148,7 +148,7 @@ export function Window({
           style={{
             position: "absolute",
             zIndex: win.zIndex,
-            // top: win.position.y,
+            top: win.position.y,
           }}
           className="rounded-xl overflow-hidden"
           onMouseDown={handleMouseDown}

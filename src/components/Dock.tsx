@@ -130,15 +130,15 @@ export function Dock({ items, onItemClick, isDark }: DockProps) {
         }
       `}</style>
 
-      <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          duration: 0.7,
-          delay: 0.8,
-          ease: [0.68, -0.55, 0.265, 1.55],
-        }}
-        className="fixed bottom-4 inset-x-0 mx-auto w-fit z-[999]"
+      <div
+        // initial={{ y: 100, opacity: 0 }}
+        // animate={{ y: 0, opacity: 1 }}
+        // transition={{
+        //   duration: 0.7,
+        //   delay: 0.8,
+        //   ease: [0.68, -0.55, 0.265, 1.55],
+        // }}
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999]"
       >
         <div
           ref={dockRef}
@@ -204,7 +204,7 @@ export function Dock({ items, onItemClick, isDark }: DockProps) {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </>
   );
 }

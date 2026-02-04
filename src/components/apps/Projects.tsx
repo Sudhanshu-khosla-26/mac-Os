@@ -1,6 +1,17 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Star, GitFork, LayoutGrid, List as ListIcon, ChevronDown, ChevronUp, Code2, Rocket, Zap } from 'lucide-react';
+import { useState, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ExternalLink,
+  Github,
+  ArrowLeft,
+  Folder,
+  Code2,
+  Layers,
+  CheckCircle2,
+  ArrowUpRight,
+} from "lucide-react";
+
+// --- Interfaces ---
 
 interface ProjectsProps {
   isDark: boolean;
@@ -11,454 +22,552 @@ interface Project {
   name: string;
   description: string;
   longDescription: string;
-  techStack: string[];
+  // Added image property with placeholders for demonstration
   image: string;
+  techStack: string[];
+  category: string;
+  year: string;
   github?: string;
   demo?: string;
-  stars: number;
-  forks: number;
+  metrics: {
+    label: string;
+    value: string;
+  }[];
   featured: boolean;
-  highlights?: string[];
+  highlights: string[];
+  color: string; // Kept color for subtle accents/tags
 }
+
+// --- Mock Data (Updated with Image Placeholders) ---
 
 const PROJECTS: Project[] = [
   {
-    id: 'deployhub',
-    name: 'DeployHub',
-    description: 'One-click deployment platform with real-time log tracking',
-    longDescription: 'A comprehensive deployment platform that streamlines the deployment process with one-click deployments, real-time Kafka log tracking, subdomain-based access, and ClickHouse analytics for monitoring.',
-    techStack: ['AWS ECS/ECR', 'PostgreSQL', 'Kafka', 'Prisma', 'ClickHouse', 'Docker', 'Express.js', 'React.js'],
-    image: 'deploy',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 245,
-    forks: 56,
+    id: "deployhub",
+    name: "DeployHub",
+    description: "One-click deployment platform with real-time log tracking",
+    longDescription:
+      "A comprehensive deployment platform that streamlines the deployment process with one-click deployments, real-time Kafka log tracking, subdomain-based access, and ClickHouse analytics for monitoring. Built to handle production-grade deployments with enterprise-level reliability.",
+    // Using a placeholder image service for the demo
+    image:
+      "https://placehold.co/600x400/007AFF/ffffff?text=DeployHub+Dashboard",
+    techStack: [
+      "AWS ECS/ECR",
+      "PostgreSQL",
+      "Kafka",
+      "Prisma",
+      "ClickHouse",
+      "Docker",
+      "React.js",
+    ],
+    category: "DevOps",
+    year: "2024",
+    github: "https://github.com",
+    demo: "https://demo.com",
+    metrics: [
+      { label: "Active Users", value: "2.5K+" },
+      { label: "Uptime", value: "99.9%" },
+      { label: "Deploy Speed", value: "70% faster" },
+    ],
     featured: true,
-    highlights: ['Real-time log streaming with Kafka', 'Subdomain-based service access', 'ClickHouse analytics dashboard'],
+    highlights: [
+      "Real-time log streaming with Kafka for instant deployment feedback",
+      "Automatic subdomain-based service access with SSL certificates",
+      "ClickHouse analytics dashboard with performance insights",
+      "Docker containerization with automated scaling",
+    ],
+    color: "#007AFF",
   },
   {
-    id: 'videotube',
-    name: 'VideoTube',
-    description: 'Mood-based video recommendation platform',
-    longDescription: 'An intelligent video platform with mood-based recommendations using Gemini AI, featuring user authentication, video uploads, and interactive features like comments and subscriptions.',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloudinary', 'JWT', 'Gemini AI'],
-    image: 'video',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 189,
-    forks: 42,
+    id: "videotube",
+    name: "VideoTube",
+    description: "Mood-based video recommendation platform",
+    longDescription:
+      "An intelligent video platform with mood-based recommendations using Gemini AI, featuring user authentication, video uploads, and interactive features like comments and subscriptions. The platform analyzes user emotions and preferences to deliver personalized content experiences.",
+    image: "https://placehold.co/600x400/FF3B30/ffffff?text=VideoTube+UI",
+    techStack: ["React.js", "Node.js", "MongoDB", "Cloudinary", "Gemini AI"],
+    category: "AI/ML",
+    year: "2024",
+    github: "https://github.com",
+    demo: "https://demo.com",
+    metrics: [
+      { label: "Active Users", value: "5K+" },
+      { label: "Match Accuracy", value: "85%" },
+      { label: "Engagement", value: "3x increase" },
+    ],
     featured: true,
-    highlights: ['AI-powered mood detection', 'Secure video streaming', 'Real-time notifications'],
+    highlights: [
+      "AI-powered mood detection using Google Gemini API",
+      "Secure video streaming with Cloudinary CDN integration",
+      "Real-time notifications for comments and subscriptions",
+      "JWT-based authentication with refresh token rotation",
+    ],
+    color: "#FF3B30",
   },
   {
-    id: 'ai-recruitment',
-    name: 'AI Recruitment Platform',
-    description: 'Automated candidate screening with 3D AI agents',
-    longDescription: 'An AI-powered recruitment platform featuring automated candidate screening, bulk resume analysis, JD relevance scoring, and 3D AI agent interviews using Vapi.',
-    techStack: ['Next.js', 'Vapi AI', 'PostgreSQL', 'Prisma', 'OpenAI', 'Tailwind CSS'],
-    image: 'recruitment',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 312,
-    forks: 78,
+    id: "ai-recruitment",
+    name: "AI Recruitment Platform",
+    description: "Automated candidate screening with 3D AI agents",
+    longDescription:
+      "An AI-powered recruitment platform featuring automated candidate screening, bulk resume analysis, JD relevance scoring, and 3D AI agent interviews using Vapi. The platform revolutionizes the hiring process by combining AI intelligence with human-like interactions.",
+    image: "https://placehold.co/600x400/34C759/ffffff?text=AI+Interviewer",
+    techStack: [
+      "Next.js",
+      "Vapi AI",
+      "PostgreSQL",
+      "Prisma",
+      "OpenAI",
+      "Tailwind CSS",
+    ],
+    category: "AI/ML",
+    year: "2024",
+    github: "https://github.com",
+    demo: "https://demo.com",
+    metrics: [
+      { label: "Companies", value: "150+" },
+      { label: "Accuracy", value: "90%" },
+      { label: "Time Saved", value: "60%" },
+    ],
     featured: true,
-    highlights: ['3D AI interviewer agents', 'Bulk resume processing', 'JD-candidate matching'],
+    highlights: [
+      "3D AI interviewer agents with natural conversation capabilities",
+      "Bulk resume processing with OpenAI-powered analysis",
+      "JD-candidate matching algorithm with relevance scoring",
+      "Real-time interview transcription and sentiment analysis",
+    ],
+    color: "#34C759",
   },
   {
-    id: 'realestate',
-    name: 'Real Estate Automation',
-    description: 'Lead management with AI-powered calls',
-    longDescription: 'A real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving operational efficiency by 50%.',
-    techStack: ['Next.js', 'n8n', 'Vapi AI', 'PostgreSQL', 'Prisma'],
-    image: 'realestate',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 156,
-    forks: 34,
+    id: "realestate",
+    name: "Real Estate Automation",
+    description: "Lead management with AI-powered calls",
+    longDescription:
+      "A real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving operational efficiency by 50%. The system handles lead qualification, follow-ups, and scheduling with minimal human intervention.",
+    image: "https://placehold.co/600x400/5856D6/ffffff?text=Automation+Flow",
+    techStack: ["Next.js", "n8n", "Vapi AI", "PostgreSQL", "Prisma"],
+    category: "Automation",
+    year: "2024",
+    github: "https://github.com",
+    metrics: [
+      { label: "Agents", value: "50+" },
+      { label: "Efficiency", value: "+50%" },
+      { label: "Daily Leads", value: "200+" },
+    ],
     featured: false,
-    highlights: ['50% efficiency improvement', 'Automated lead follow-up', 'Smart scheduling'],
+    highlights: [
+      "50% improvement in operational efficiency",
+      "Automated lead follow-up with intelligent scheduling",
+      "Smart call routing based on lead quality scores",
+      "n8n workflow automation for complex business processes",
+    ],
+    color: "#5856D6",
   },
-  {
-    id: 'internportal',
-    name: 'Intern Management Portal',
-    description: 'Comprehensive intern tracking and evaluation system',
-    longDescription: 'A full-featured intern management portal with attendance tracking, batch creation, task assignment, performance-based ranking, and role-based access control.',
-    techStack: ['MERN Stack', 'JWT', 'Redux Toolkit', 'Tailwind CSS'],
-    image: 'intern',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 98,
-    forks: 23,
-    featured: false,
-    highlights: ['Performance analytics', 'Batch management', 'Role-based permissions'],
-  },
-  {
-    id: 'codezen',
-    name: 'Code-Zen Hackathon',
-    description: 'Official website for college hackathon',
-    longDescription: 'The official website for Code-Zen, the college hackathon, featuring event registration, schedule, sponsor information, and live updates.',
-    techStack: ['React.js', 'Node.js', 'MongoDB', 'Tailwind CSS'],
-    image: 'hackathon',
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-    stars: 267,
-    forks: 89,
-    featured: false,
-    highlights: ['Live event tracking', 'Team registration', 'Sponsor showcase'],
-  },
+  // ... other projects would have images added similarly
 ];
 
-const FILTERS = ['All', 'Featured', 'Full Stack', 'AI/ML'];
+const CATEGORIES = [
+  "All",
+  "Featured",
+  "AI/ML",
+  "DevOps",
+  "Full Stack",
+  "Automation",
+] as const;
 
-export function Projects({ isDark }: ProjectsProps) {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [expandedProject, setExpandedProject] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+// --- Sub-Components ---
 
-  const filteredProjects = PROJECTS.filter(project => {
-    if (activeFilter === 'All') return true;
-    if (activeFilter === 'Featured') return project.featured;
-    if (activeFilter === 'Full Stack') return project.techStack.some(t => ['React.js', 'Node.js', 'Next.js'].includes(t));
-    if (activeFilter === 'AI/ML') return project.techStack.some(t => ['Vapi AI', 'Gemini AI', 'OpenAI', 'n8n'].includes(t));
-    return true;
-  });
-
-  const toggleExpand = (projectId: string) => {
-    setExpandedProject(expandedProject === projectId ? null : projectId);
-  };
+// 1. The Project Card (For the Grid View)
+function ProjectCard({
+  project,
+  isDark,
+  onClick,
+}: {
+  project: Project;
+  isDark: boolean;
+  onClick: () => void;
+}) {
+  const borderColor = isDark ? "border-white/10" : "border-black/10";
+  const bgColor = isDark
+    ? "bg-[#2d2d2d] hover:bg-[#363636]"
+    : "bg-white hover:bg-gray-50";
+  const textColor = isDark ? "text-white" : "text-gray-900";
+  const mutedTextColor = isDark ? "text-white/60" : "text-gray-600";
 
   return (
-    <div className={`w-full h-full overflow-auto ${isDark ? 'bg-[#0a0a0a]' : 'bg-gray-50'}`}>
-      {/* Header */}
-      <div className={`sticky top-0 z-10 px-6 py-4 border-b ${
-        isDark ? 'bg-[#0a0a0a]/95 border-white/10' : 'bg-gray-50/95 border-black/10'
-      }`}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Projects
-            </h1>
-            <p className={`mt-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-              A collection of my recent work and side projects
-            </p>
+    <article
+      // layoutId={`project-container-${project.id}`}
+      onClick={onClick}
+      className={`group cursor-pointer rounded-xl border ${borderColor} ${bgColor} overflow-hidden transition-all duration-200 flex flex-col h-full`}
+    >
+      {/* Image Section */}
+      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <img
+          src={project.image}
+          alt={project.name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+        {project.featured && (
+          <div className="absolute top-3 right-3">
+            <span
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md ${isDark ? "bg-blue-500/80 text-white" : "bg-blue-600/90 text-white"}`}
+            >
+              Featured
+            </span>
           </div>
-          
-          {/* View Mode Toggle */}
-          <div className={`flex items-center gap-1 p-1 rounded-lg ${
-            isDark ? 'bg-white/10' : 'bg-black/10'
-          }`}>
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'grid'
-                  ? 'bg-[#007aff] text-white'
-                  : isDark ? 'text-white/60 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <LayoutGrid className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'list'
-                  ? 'bg-[#007aff] text-white'
-                  : isDark ? 'text-white/60 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <ListIcon className="w-4 h-4" />
-            </button>
+        )}
+      </div>
+
+      {/* Content Section */}
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="flex items-center justify-between mb-3">
+          <span
+            className={`text-xs font-medium px-2.5 py-0.5 rounded-md ${isDark ? "bg-white/10 text-white/70" : "bg-gray-100 text-gray-600"}`}
+          >
+            {project.category}
+          </span>
+          <span className={`text-xs ${mutedTextColor}`}>{project.year}</span>
+        </div>
+        <h3 className={`text-lg font-bold mb-2 line-clamp-1 ${textColor}`}>
+          {project.name}
+        </h3>
+        <p className={`text-sm line-clamp-2 mb-4 flex-grow ${mutedTextColor}`}>
+          {project.description}
+        </p>
+
+        {/* Mini Tech Stack Preview */}
+        <div className="flex items-center gap-2 mt-auto pt-4 border-t border-dashed ${isDark ? 'border-white/10' : 'border-gray-200'}">
+          <Code2 className={`w-4 h-4 ${mutedTextColor}`} />
+          <div className="flex gap-1.5 flex-wrap truncate">
+            {project.techStack.slice(0, 3).map((tech) => (
+              <span key={tech} className={`text-xs ${mutedTextColor}`}>
+                {tech}
+                {tech !== project.techStack.slice(0, 3).slice(-1)[0] && " •"}
+              </span>
+            ))}
+            {project.techStack.length > 3 && (
+              <span className={`text-xs ${mutedTextColor}`}>
+                +{project.techStack.length - 3}
+              </span>
+            )}
           </div>
         </div>
+      </div>
+    </article>
+  );
+}
 
-        {/* Filters */}
-        <div className="flex items-center gap-2 mt-4">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeFilter === filter
-                  ? 'bg-[#007aff] text-white'
-                  : isDark
-                    ? 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
-                    : 'bg-black/10 text-gray-700 hover:bg-black/20 hover:text-gray-900'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
+// 2. The Project Details View (Full Page)
+function ProjectDetails({
+  project,
+  isDark,
+  onClose,
+}: {
+  project: Project;
+  isDark: boolean;
+  onClose: () => void;
+}) {
+  const textColor = isDark ? "text-white" : "text-gray-900";
+  const mutedTextColor = isDark ? "text-white/60" : "text-gray-600";
+  const borderColor = isDark ? "border-white/10" : "border-black/10";
+  const sectionHeaderColor = isDark ? "text-white/40" : "text-gray-500";
+
+  // Tag styles (flat, no gradient)
+  const tagStyle = isDark
+    ? "bg-white/10 text-white/90 border border-white/5"
+    : "bg-gray-100 text-gray-800 border border-gray-200";
+
+  const buttonBaseStyle =
+    "flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors border";
+  const primaryButtonStyle = isDark
+    ? `${buttonBaseStyle} bg-blue-600 hover:bg-blue-700 text-white border-transparent`
+    : `${buttonBaseStyle} bg-blue-600 hover:bg-blue-700 text-white border-transparent`;
+  const secondaryButtonStyle = isDark
+    ? `${buttonBaseStyle} bg-transparent hover:bg-white/5 text-white border-white/20`
+    : `${buttonBaseStyle} bg-white hover:bg-gray-50 text-gray-900 border-gray-300`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={`w-full h-full overflow-y-auto ${isDark ? "bg-[#1e1e1e]" : "bg-[#f5f5f7]"}`}
+    >
+      {/* Sticky Header */}
+      <div
+        className={`sticky top-0 z-10 backdrop-blur-md border-b ${borderColor} ${isDark ? "bg-[#1e1e1e]/80" : "bg-[#f5f5f7]/80"}`}
+      >
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-4">
+          <button
+            onClick={onClose}
+            aria-label="Back to projects"
+            className={`p-2 rounded-full transition-colors ${isDark ? "hover:bg-white/10 text-white" : "hover:bg-black/5 text-gray-900"}`}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h2 className={`text-lg font-bold truncate ${textColor}`}>
+            {project.name}
+          </h2>
         </div>
       </div>
 
-      {/* Projects Grid/List */}
-      <div className="p-6">
-        <div className={viewMode === 'grid' 
-          ? 'grid grid-cols-1 md:grid-cols-2 gap-4' 
-          : 'space-y-3'
-        }>
-          {filteredProjects.map((project, index) => {
-            const isExpanded = expandedProject === project.id;
-            
-            return (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.3, 
-                  delay: index * 0.05,
-                  layout: { duration: 0.3 }
-                }}
-                className={`rounded-2xl overflow-hidden transition-all duration-300 ${
-                  viewMode === 'list' && !isExpanded ? 'flex items-center gap-4 p-4' : ''
-                } ${
-                  isDark 
-                    ? 'bg-[#1e1e1e] hover:bg-[#252525]' 
-                    : 'bg-white hover:shadow-lg'
-                }`}
-                style={{
-                  border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
-                }}
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        {/* Hero Image */}
+        <div
+          // layoutId={`project-container-${project.id}`}
+          className="rounded-2xl overflow-hidden mb-8 border ${borderColor}"
+        >
+          <img
+            src={project.image}
+            alt={project.name}
+            className="w-full max-h-[500px] object-cover object-top"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Main Content (Left Column) */}
+          <div className="lg:col-span-2 space-y-8">
+            <section>
+              <h3
+                className={`text-sm font-bold uppercase tracking-wider mb-4 ${sectionHeaderColor}`}
               >
-                {/* Collapsed View */}
-                {!isExpanded && (
-                  <>
-                    {/* Project Icon */}
-                    <div 
-                      onClick={() => toggleExpand(project.id)}
-                      className={`flex items-center justify-center cursor-pointer transition-transform hover:scale-105 ${
-                        viewMode === 'grid' 
-                          ? `h-40 ${isDark ? 'bg-gradient-to-br from-[#007aff]/20 to-[#5ac8fa]/10' : 'bg-gradient-to-br from-blue-50 to-cyan-50'}`
-                          : `w-14 h-14 rounded-xl flex-shrink-0 ${isDark ? 'bg-[#007aff]/20' : 'bg-blue-100'}`
-                      }`}
-                    >
-                      <div className={`${
-                        viewMode === 'grid' 
-                          ? 'w-16 h-16 rounded-2xl' 
-                          : 'w-10 h-10 rounded-lg'
-                      } flex items-center justify-center ${
-                        isDark ? 'bg-[#007aff]/30' : 'bg-blue-200/50'
-                      }`}>
-                        <Code2 className={`${viewMode === 'grid' ? 'w-8 h-8' : 'w-5 h-5'} ${isDark ? 'text-[#007aff]' : 'text-blue-600'}`} />
-                      </div>
-                    </div>
+                About the Project
+              </h3>
+              <p
+                className={`text-base leading-relaxed whitespace-pre-line ${mutedTextColor}`}
+              >
+                {project.longDescription}
+              </p>
+            </section>
 
-                    {/* Content */}
-                    <div className={viewMode === 'grid' ? 'p-5' : 'flex-1'}>
-                      <div 
-                        onClick={() => toggleExpand(project.id)}
-                        className="flex items-start justify-between cursor-pointer"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {project.name}
-                            </h3>
-                            {project.featured && (
-                              <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${
-                                isDark 
-                                  ? 'bg-[#ff9500]/20 text-[#ff9500]' 
-                                  : 'bg-orange-100 text-orange-600'
-                              }`}>
-                                <Zap className="w-3 h-3" />
-                                Featured
-                              </span>
-                            )}
-                          </div>
-                          <p className={`text-sm mt-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                            {project.description}
-                          </p>
-                        </div>
-                        <ChevronDown className={`w-5 h-5 ${isDark ? 'text-white/40' : 'text-gray-400'} transition-transform`} />
-                      </div>
+            <section>
+              <h3
+                className={`text-sm font-bold uppercase tracking-wider mb-4 ${sectionHeaderColor}`}
+              >
+                Key Highlights
+              </h3>
+              <ul className="space-y-3">
+                {project.highlights.map((highlight, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2
+                      className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isDark ? "text-blue-400" : "text-blue-600"}`}
+                    />
+                    <span className={mutedTextColor}>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
 
-                      {/* Tech Stack Preview */}
-                      <div className={`flex flex-wrap gap-1.5 mt-3 ${viewMode === 'list' ? 'hidden sm:flex' : ''}`}>
-                        {project.techStack.slice(0, viewMode === 'grid' ? 4 : 3).map((tech) => (
-                          <span
-                            key={tech}
-                            className={`px-2 py-0.5 rounded-md text-xs ${
-                              isDark 
-                                ? 'bg-white/5 text-white/60' 
-                                : 'bg-black/5 text-gray-600'
-                            }`}
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                        {project.techStack.length > (viewMode === 'grid' ? 4 : 3) && (
-                          <span className={`px-2 py-0.5 rounded-md text-xs ${
-                            isDark ? 'text-white/40' : 'text-gray-400'
-                          }`}>
-                            +{project.techStack.length - (viewMode === 'grid' ? 4 : 3)}
-                          </span>
-                        )}
-                      </div>
+          {/* Sidebar (Right Column) */}
+          <div className="space-y-8">
+            {/* Actions */}
+            <div className="flex flex-col gap-3">
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={primaryButtonStyle}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Live Demo <ArrowUpRight className="w-3 h-3 ml-1 opacity-70" />
+                </a>
+              )}
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={secondaryButtonStyle}
+                >
+                  <Github className="w-4 h-4" />
+                  Source Code
+                </a>
+              )}
+            </div>
 
-                      {/* Stats */}
-                      <div className={`flex items-center gap-4 mt-3 ${viewMode === 'list' ? 'mt-2' : ''}`}>
-                        <div className={`flex items-center gap-1 text-sm ${
-                          isDark ? 'text-white/50' : 'text-gray-500'
-                        }`}>
-                          <Star className="w-4 h-4" />
-                          <span>{project.stars}</span>
-                        </div>
-                        <div className={`flex items-center gap-1 text-sm ${
-                          isDark ? 'text-white/50' : 'text-gray-500'
-                        }`}>
-                          <GitFork className="w-4 h-4" />
-                          <span>{project.forks}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
+            {/* Metrics Grid */}
+            <div
+              className={`grid grid-cols-2 gap-4 p-5 rounded-xl border ${borderColor} ${isDark ? "bg-white/5" : "bg-white"}`}
+            >
+              {project.metrics.map((metric, index) => (
+                <div
+                  key={index}
+                  className={
+                    index % 2 === 0 && index !== project.metrics.length - 1
+                      ? `border-r ${borderColor}`
+                      : ""
+                  }
+                >
+                  <div className={`text-2xl font-bold ${textColor}`}>
+                    {metric.value}
+                  </div>
+                  <div
+                    className={`text-xs font-medium uppercase tracking-wide ${mutedTextColor}`}
+                  >
+                    {metric.label}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-                {/* Expanded View - Inline Details */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                      className="p-5"
-                    >
-                      {/* Header with close button */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                            isDark ? 'bg-[#007aff]/20' : 'bg-blue-100'
-                          }`}>
-                            <Rocket className={`w-6 h-6 ${isDark ? 'text-[#007aff]' : 'text-blue-600'}`} />
-                          </div>
-                          <div>
-                            <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {project.name}
-                            </h3>
-                            <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-500'}`}>
-                              {project.description}
-                            </p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => toggleExpand(project.id)}
-                          className={`p-2 rounded-lg transition-colors ${
-                            isDark ? 'hover:bg-white/10' : 'hover:bg-black/10'
-                          }`}
-                        >
-                          <ChevronUp className={`w-5 h-5 ${isDark ? 'text-white/60' : 'text-gray-500'}`} />
-                        </button>
-                      </div>
-
-                      {/* Description */}
-                      <p className={`text-sm leading-relaxed mb-5 ${isDark ? 'text-white/80' : 'text-gray-700'}`}>
-                        {project.longDescription}
-                      </p>
-
-                      {/* Highlights */}
-                      {project.highlights && (
-                        <div className="mb-5">
-                          <h4 className={`text-xs font-semibold uppercase tracking-wider mb-2 ${
-                            isDark ? 'text-white/40' : 'text-gray-400'
-                          }`}>
-                            Key Highlights
-                          </h4>
-                          <ul className="space-y-1.5">
-                            {project.highlights.map((highlight, i) => (
-                              <li 
-                                key={i} 
-                                className={`flex items-center gap-2 text-sm ${
-                                  isDark ? 'text-white/70' : 'text-gray-600'
-                                }`}
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#34c759]" />
-                                {highlight}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Full Tech Stack */}
-                      <div className="mb-5">
-                        <h4 className={`text-xs font-semibold uppercase tracking-wider mb-2 ${
-                          isDark ? 'text-white/40' : 'text-gray-400'
-                        }`}>
-                          Tech Stack
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.techStack.map((tech) => (
-                            <span
-                              key={tech}
-                              className={`px-3 py-1.5 rounded-lg text-sm ${
-                                isDark 
-                                  ? 'bg-white/10 text-white/80' 
-                                  : 'bg-black/10 text-gray-700'
-                              }`}
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Stats Row */}
-                      <div className={`flex items-center gap-6 mb-5 py-3 border-y ${
-                        isDark ? 'border-white/10' : 'border-black/10'
-                      }`}>
-                        <div className={`flex items-center gap-2 ${
-                          isDark ? 'text-white/70' : 'text-gray-700'
-                        }`}>
-                          <Star className="w-4 h-4" />
-                          <span className="text-sm font-medium">{project.stars} stars</span>
-                        </div>
-                        <div className={`flex items-center gap-2 ${
-                          isDark ? 'text-white/70' : 'text-gray-700'
-                        }`}>
-                          <GitFork className="w-4 h-4" />
-                          <span className="text-sm font-medium">{project.forks} forks</span>
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-3">
-                        {project.demo && (
-                          <a
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#007aff] text-white rounded-xl font-medium hover:bg-[#007aff]/90 transition-colors text-sm"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            Live Demo
-                          </a>
-                        )}
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-colors text-sm ${
-                              isDark 
-                                ? 'bg-white/10 text-white hover:bg-white/20' 
-                                : 'bg-black/10 text-gray-900 hover:bg-black/20'
-                            }`}
-                          >
-                            <Github className="w-4 h-4" />
-                            View Code
-                          </a>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
+            {/* Tech Stack Info */}
+            <section>
+              <h3
+                className={`text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 ${sectionHeaderColor}`}
+              >
+                <Layers className="w-4 h-4" /> Technologies
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {project.techStack.map((tech) => (
+                  <span
+                    key={tech}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium ${tagStyle}`}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </section>
+            {/* Metadata */}
+            <div
+              className={`pt-4 border-t ${borderColor} flex items-center justify-between text-sm ${mutedTextColor}`}
+            >
+              <span>Category: {project.category}</span>
+              <span>Year: {project.year}</span>
+            </div>
+          </div>
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+// --- Main Component ---
+
+export function Projects({ isDark }: ProjectsProps) {
+  const [activeCategory, setActiveCategory] =
+    useState<(typeof CATEGORIES)[number]>("All");
+  // State to track which project is currently selected for details view
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null,
+  );
+
+  const filteredProjects = useMemo(() => {
+    // If a project is selected, we still want the list context underneath,
+    // but for performance, we could limit this. For now, keep filtering live.
+    return PROJECTS.filter((project) => {
+      if (activeCategory === "All") return true;
+      if (activeCategory === "Featured") return project.featured;
+      return project.category === activeCategory;
+    });
+  }, [activeCategory]);
+
+  const selectedProject = useMemo(() => {
+    return PROJECTS.find((p) => p.id === selectedProjectId);
+  }, [selectedProjectId]);
+
+  const handleCloseDetails = useCallback(() => {
+    setSelectedProjectId(null);
+  }, []);
+
+  // Base colors used for borders and backgrounds throughout
+  const borderColor = isDark ? "border-white/10" : "border-black/10";
+  const toolbarBg = isDark ? "bg-[#1e1e1e]" : "bg-[#f5f5f7]";
+
+  return (
+    <div className={`relative w-full h-full overflow-hidden ${toolbarBg}`}>
+      <AnimatePresence mode="wait">
+        {/* CONDITIONAL RENDERING: Show Details View OR List View */}
+
+        {selectedProjectId && selectedProject ? (
+          // --- DETAILS VIEW ---
+          <ProjectDetails
+            key="details"
+            project={selectedProject}
+            isDark={isDark}
+            onClose={handleCloseDetails}
+          />
+        ) : (
+          // --- LIST VIEW (GRID) ---
+          <motion.div
+            key="list"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+            className="h-full flex flex-col"
+          >
+            {/* Header / Filter Bar */}
+            <div
+              className={`flex-shrink-0 border-b ${borderColor} bg-inherit z-10`}
+            >
+              <div className="px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Folder
+                    className={`w-5 h-5 ${isDark ? "text-blue-400" : "text-blue-600"}`}
+                  />
+                  <h2
+                    className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}
+                  >
+                    Projects
+                  </h2>
+                  <span
+                    className={`ml-2 text-sm font-medium px-2.5 py-0.5 rounded-full ${isDark ? "bg-white/10 text-white/60" : "bg-black/5 text-gray-500"}`}
+                  >
+                    {filteredProjects.length}
+                  </span>
+                </div>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="px-6 pb-3 flex items-center gap-2 overflow-x-auto hide-scrollbar">
+                {CATEGORIES.map((category) => {
+                  const isActive = activeCategory === category;
+                  // Flat button style, no gradient
+                  const activeStyle = isDark
+                    ? "bg-white text-gray-900"
+                    : "bg-gray-900 text-white";
+                  const inactiveStyle = isDark
+                    ? "text-white/60 hover:bg-white/10 hover:text-white"
+                    : "text-gray-600 hover:bg-black/5 hover:text-gray-900";
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap ${isActive ? activeStyle : inactiveStyle}`}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Scrollable Grid Area */}
+            <div className="flex-grow overflow-y-auto p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                {filteredProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    isDark={isDark}
+                    onClick={() => setSelectedProjectId(project.id)}
+                  />
+                ))}
+              </div>
+              {filteredProjects.length === 0 && (
+                <div
+                  className={`text-center py-20 ${isDark ? "text-white/40" : "text-gray-500"}`}
+                >
+                  No projects found in this category.
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

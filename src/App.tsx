@@ -106,6 +106,45 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  const isAnyWindowMaximized = windows.some(
+    (w) => w.isMaximized && !w.isMinimized,
+  );
+  const [showDock, setShowDock] = useState(true);
+  const [isHoveringDock, setIsHoveringDock] = useState(false);
+
+  useEffect(() => {
+    if (!isAnyWindowMaximized) {
+      setShowDock(true);
+      return;
+    }
+
+    let hideTimeout: NodeJS.Timeout;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const threshold = 100; // px from bottom - increased for better UX
+      const isNearBottom = window.innerHeight - e.clientY <= threshold;
+
+      if (isNearBottom || isHoveringDock) {
+        clearTimeout(hideTimeout);
+        setShowDock(true);
+      } else {
+        // Add a small delay before hiding to prevent flickering
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(() => {
+          if (!isHoveringDock) {
+            setShowDock(false);
+          }
+        }, 300);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      clearTimeout(hideTimeout);
+    };
+  }, [isAnyWindowMaximized, isHoveringDock]);
+
   // Listen for menu bar events
   useEffect(() => {
     const handleOpenApp = (e: CustomEvent) => {
@@ -372,18 +411,32 @@ function App() {
       </div>
 
       {/* Dock */}
-      <Dock
-        items={apps.map((app) => ({
-          id: app.id,
-          name: app.name,
-          icon: app.icon,
-          color: app.color,
-          isOpen: app.isOpen,
-          isPersistent: true,
-        }))}
-        onItemClick={handleDockItemClick}
-        isDark={isDark}
-      />
+      <AnimatePresence>
+        {showDock && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999]"
+            onMouseEnter={() => setIsHoveringDock(true)}
+            onMouseLeave={() => setIsHoveringDock(false)}
+          >
+            <Dock
+              items={apps.map((app) => ({
+                id: app.id,
+                name: app.name,
+                icon: app.icon,
+                color: app.color,
+                isOpen: app.isOpen,
+                isPersistent: true,
+              }))}
+              onItemClick={handleDockItemClick}
+              isDark={isDark}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Spotlight - Centered */}
       <Spotlight
