@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X } from "lucide-react";
 import * as LucideIcons from "lucide-react";
@@ -19,6 +19,15 @@ export function Launchpad({
   isDark,
 }: LaunchpadProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile for focus and scroll logic
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const filteredApps = apps.filter((app) =>
     app.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -43,39 +52,39 @@ export function Launchpad({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[5000]"
-          onClick={onClose}
+          className="fixed inset-0 z-[5000] overflow-hidden"
         >
-          {/* Blurred Background */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "url(/wallpaper.jpg)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(40px) brightness(0.7)",
-              transform: "scale(1.1)",
-            }}
-          />
+          {/* --- BACKGROUND TAP-TO-CLOSE LAYER --- */}
+          <div className="absolute inset-0 z-[5001]" onClick={onClose}>
+            {/* Blurred Wallpaper */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: "url(/wallpaper.jpg)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(40px) brightness(0.7)",
+                transform: "scale(1.1)",
+              }}
+            />
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
 
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/40" />
-
-          {/* Content */}
+          {/* --- CONTENT LAYER --- */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative h-full flex flex-col items-center justify-center p-8"
-            onClick={(e) => e.stopPropagation()}
+            className="relative z-[5002] h-full flex flex-col items-center justify-center p-8 pointer-events-none"
           >
-            {/* Search Bar */}
-            <div className="mb-12 w-full max-w-md">
+            {/* Search Bar - Re-enable pointer events here */}
+            <div className="mb-12 w-full max-w-md pointer-events-auto">
               <div
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
                   isDark ? "bg-white/15" : "bg-white/25"
-                }`}
+                } backdrop-blur-md`}
               >
                 <Search className="w-5 h-5 text-white/70" />
                 <input
@@ -84,7 +93,7 @@ export function Launchpad({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search"
                   className="flex-1 bg-transparent outline-none text-white placeholder:text-white/50 text-lg"
-                  autoFocus
+                  autoFocus={!isMobile} // 🔥 NO AUTO-FOCUS ON MOBILE
                 />
                 {searchQuery && (
                   <button
@@ -97,8 +106,14 @@ export function Launchpad({
               </div>
             </div>
 
-            {/* Apps Grid */}
-            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-6 md:gap-8 max-w-5xl">
+            {/* Apps Grid - Re-enable pointer events here */}
+            <div
+              className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-6 md:gap-8 max-w-5xl overflow-y-auto pointer-events-auto no-scrollbar pb-10"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {/* Internal style for Webkit Hide */}
+              <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
+
               {filteredApps.map((app, index) => {
                 const Icon = getIconComponent(app.icon);
 
@@ -119,21 +134,27 @@ export function Launchpad({
                   >
                     {/* App Icon */}
                     <div
-                      className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:shadow-2xl"
+                      className="w-16 h-16 md:w-24 md:h-24 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:shadow-2xl overflow-hidden"
                       style={{
-                        // background: app.color,
                         boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
                       }}
                     >
-                      <img src={`/Icons/${app.icon}`} alt={app.name} />
+                      <img
+                        src={`/Icons/${app.icon}`}
+                        alt={app.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) =>
+                          (e.currentTarget.style.display = "none")
+                        }
+                      />
                       <Icon
-                        className="w-10 h-10 md:w-12 md:h-12 text-white"
+                        className="w-8 h-8 md:w-12 md:h-12 text-white"
                         strokeWidth={1.5}
                       />
                     </div>
 
                     {/* App Name */}
-                    <span className="text-white text-sm font-medium text-center drop-shadow-lg">
+                    <span className="text-white text-[11px] md:text-sm font-medium text-center drop-shadow-lg">
                       {app.name}
                     </span>
                   </motion.button>
@@ -146,9 +167,9 @@ export function Launchpad({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute bottom-8 text-white/50 text-sm"
+              className="absolute bottom-8 text-white/50 text-sm font-medium"
             >
-              Press Esc to close
+              {isMobile ? "Tap background to close" : "Press Esc to close"}
             </motion.p>
           </motion.div>
         </motion.div>

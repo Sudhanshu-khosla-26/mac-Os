@@ -9,6 +9,7 @@ import {
   Terminal,
   Cpu,
   Menu,
+  X,
 } from "lucide-react";
 
 interface SkillsProps {
@@ -150,70 +151,119 @@ export function Skills({ isDark }: SkillsProps) {
 
   return (
     <div
-      className={`w-full h-full flex ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}
+      className={`relative w-full h-full flex  flex-col md:flex-row ${
+        isDark ? "bg-[#0a0a0a]" : "bg-gray-50"
+      }`}
     >
-      {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 inset-x-0 z-10 p-4 flex items-center justify-between backdrop-blur">
-        <h2
-          className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
-        >
-          Skills
-        </h2>
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className={`p-2 rounded-lg ${isDark ? "bg-white/10" : "bg-black/10"}`}
-        >
-          <Menu size={18} />
-        </button>
-      </div>
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className={`p-2 w-fit md:hidden m-2 ml-auto mr-2 rounded-lg ${isDark ? "bg-white/10" : "bg-black/10"}`}
+      >
+        <Menu size={18} />
+      </button>
 
-      {/* Sidebar */}
+      {/* ================= MOBILE SIDEBAR OVERLAY ================= */}
       <AnimatePresence>
-        {(sidebarOpen || typeof window !== "undefined") && (
-          <motion.div
-            initial={{ x: -260 }}
-            animate={{ x: 0 }}
-            exit={{ x: -260 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={`fixed md:static top-0 left-0 h-full w-60 z-20 border-r ${
-              isDark
-                ? "border-white/10 bg-[#1e1e1e]"
-                : "border-black/10 bg-white"
-            }`}
-          >
-            <div className="p-4 pt-16 md:pt-4 space-y-1">
-              {SKILL_CATEGORIES.map((category) => {
-                const Icon = getIconComponent(category.icon);
-                const isActive = activeCategory === category.id;
+        {sidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/40 md:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
 
-                return (
-                  <button
-                    key={category.id}
-                    onClick={() => {
-                      setActiveCategory(category.id);
-                      setSidebarOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition ${
-                      isActive
-                        ? isDark
-                          ? "bg-white/10 text-white"
-                          : "bg-black/10 text-gray-900"
-                        : isDark
-                          ? "text-white/70 hover:bg-white/5"
-                          : "text-gray-600 hover:bg-black/5"
-                    }`}
-                  >
-                    <Icon size={16} style={{ color: category.color }} />
-                    <span className="text-sm font-medium">{category.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
+            {/* Sidebar */}
+            <motion.div
+              initial={{ x: -260 }}
+              animate={{ x: 0 }}
+              exit={{ x: -260 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className={`fixed top-0 left-0 h-full w-60 z-40 border-r ${
+                isDark
+                  ? "border-white/10 bg-[#1e1e1e]"
+                  : "border-black/10 bg-white"
+              }`}
+            >
+              <div className="p-4 pt-16 space-y-1">
+                {SKILL_CATEGORIES.map((category) => {
+                  const Icon = getIconComponent(category.icon);
+                  const isActive = activeCategory === category.id;
+
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => {
+                        setActiveCategory(category.id);
+                        setSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition ${
+                        isActive
+                          ? isDark
+                            ? "bg-white/10 text-white"
+                            : "bg-black/10 text-gray-900"
+                          : isDark
+                            ? "text-white/70 hover:bg-white/5"
+                            : "text-gray-600 hover:bg-black/5"
+                      }`}
+                    >
+                      <Icon size={16} style={{ color: category.color }} />
+                      <span className="text-sm font-medium">
+                        {category.name}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
+      {/* ================= DESKTOP SIDEBAR ================= */}
+      <div
+        className={`hidden md:block w-60 border-r ${
+          isDark ? "border-white/10 bg-[#1e1e1e]" : "border-black/10 bg-white"
+        }`}
+      >
+        <div className="p-4 space-y-1">
+          <h2
+            className={`text-lg font-bold mb-4 ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
+            Skills
+          </h2>
+
+          {SKILL_CATEGORIES.map((category) => {
+            const Icon = getIconComponent(category.icon);
+            const isActive = activeCategory === category.id;
+
+            return (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition ${
+                  isActive
+                    ? isDark
+                      ? "bg-white/10 text-white"
+                      : "bg-black/10 text-gray-900"
+                    : isDark
+                      ? "text-white/70 hover:bg-white/5"
+                      : "text-gray-600 hover:bg-black/5"
+                }`}
+              >
+                <Icon size={16} style={{ color: category.color }} />
+                <span className="text-sm font-medium">{category.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ================= MAIN CONTENT ================= */}
       <div className="flex-1 p-6 pt-20 md:pt-6 overflow-auto">
         <motion.div
           key={activeCategory}
@@ -229,12 +279,10 @@ export function Skills({ isDark }: SkillsProps) {
             {activeCategoryData?.name}
           </h1>
 
-          {/* Skills as Chips */}
           <div className="flex flex-wrap gap-3">
             {activeCategoryData?.skills.map((skill) => (
-              <motion.div
+              <div
                 key={skill.name}
-                whileHover={{ scale: 1.05 }}
                 className={`px-4 py-2 rounded-full text-sm font-medium ${
                   isDark ? "bg-white/10 text-white" : "bg-white text-gray-800"
                 }`}
@@ -245,7 +293,7 @@ export function Skills({ isDark }: SkillsProps) {
                 }}
               >
                 {skill.name}
-              </motion.div>
+              </div>
             ))}
           </div>
         </motion.div>

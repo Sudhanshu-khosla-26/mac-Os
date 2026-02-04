@@ -105,6 +105,9 @@ export const INITIAL_APPS: App[] = [
   },
 ];
 
+const isMobile = () => typeof window !== "undefined" && window.innerWidth < 768;
+// const MOBILE_DOCK_HEIGHT = 90;
+
 const createWindowState = (app: App, zIndex: number): WindowState => {
   const defaultSizes: Record<string, { width: number; height: number }> = {
     finder: { width: 850, height: 500 },
@@ -133,10 +136,11 @@ const createWindowState = (app: App, zIndex: number): WindowState => {
 
   const centerX = Math.max(20, (screenWidth - size.width) / 2);
   const centerY = Math.max(
-    menuBarHeight + 20,
-    (screenHeight - size.height - menuBarHeight - dockHeight) / 2 +
-      menuBarHeight,
+    menuBarHeight + 10,
+    (screenHeight - size.height - dockHeight) / 2,
   );
+
+  const mobile = isMobile();
 
   return {
     id: `window-${app.id}-${Date.now()}`,
@@ -144,10 +148,15 @@ const createWindowState = (app: App, zIndex: number): WindowState => {
     title: app.name,
     isOpen: true,
     isMinimized: false,
-    isMaximized: false,
+    isMaximized: mobile, // 👈 FORCE MAX ON MOBILE
     zIndex,
-    position: { x: centerX, y: centerY },
-    size: { ...size },
+    position: mobile ? { x: 0, y: 17 } : { x: centerX, y: centerY },
+    size: mobile
+      ? {
+          width: screenWidth,
+          height: screenHeight - 28,
+        }
+      : { ...size },
     defaultSize: { ...size },
     minSize: { width: 400, height: 350 },
     data: {},
@@ -166,14 +175,29 @@ export function useWindowManager() {
 
       if (existingWindow) {
         if (existingWindow.isMinimized) {
+          const mobile = isMobile();
+
           setWindows((prev) =>
             prev.map((w) =>
               w.id === existingWindow.id
-                ? { ...w, isMinimized: false, zIndex: ++zIndexCounter.current }
+                ? {
+                    ...w,
+                    isMinimized: false,
+                    isMaximized: mobile ? true : w.isMaximized,
+                    position: mobile ? { x: 0, y: 17 } : w.position,
+                    size: mobile
+                      ? {
+                          width: window.innerWidth,
+                          height: window.innerHeight - 28,
+                        }
+                      : w.size,
+                    zIndex: ++zIndexCounter.current,
+                  }
                 : w,
             ),
           );
         }
+
         setActiveWindowId(existingWindow.id);
         setApps((prev) =>
           prev.map((app) =>
@@ -235,6 +259,7 @@ export function useWindowManager() {
   );
 
   const maximizeWindow = useCallback((windowId: string) => {
+    const menuBarHeight = 15;
     setWindows((prev) =>
       prev.map((w) => {
         if (w.id !== windowId) return w;
@@ -248,12 +273,15 @@ export function useWindowManager() {
             size: { ...w.defaultSize },
             position: {
               x: Math.max(20, (screenWidth - w.defaultSize.width) / 2),
-              y: Math.max(28, (screenHeight - w.defaultSize.height) / 2),
+              y: Math.max(
+                menuBarHeight + 20,
+                (screenHeight - w.defaultSize.height - 100) / 2,
+              ),
             },
           };
         }
         // Full screen without any gaps
-        const menuBarHeight = 15;
+
         return {
           ...w,
           isMaximized: true,

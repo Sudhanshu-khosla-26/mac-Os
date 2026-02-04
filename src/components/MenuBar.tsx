@@ -61,6 +61,15 @@ export function MenuBar({
   const [isLocked, setIsLocked] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -513,18 +522,19 @@ export function MenuBar({
           </button>
 
           {/* Spotlight */}
+
           <button
-            onClick={onOpenSpotlight}
+            onClick={isMobile ? onOpenLaunchpad : onOpenSpotlight} // 🔥 Change is here
             className={`p-1.5 rounded transition-colors ${
               isDark ? "hover:bg-white/10" : "hover:bg-black/10"
             }`}
-            title="Spotlight Search"
+            title={isMobile ? "Launchpad" : "Spotlight Search"}
           >
             <Search className="w-4 h-4" />
           </button>
 
           {/* WiFi */}
-          <div className="relative">
+          <div className="relative hidden md:block">
             <button
               onClick={() => {
                 setShowWifiPanel(!showWifiPanel);
@@ -619,7 +629,7 @@ export function MenuBar({
           </div>
 
           {/* Bluetooth */}
-          <div className="relative">
+          <div className="relative hidden md:block ">
             <button
               onClick={() => {
                 setShowBluetoothPanel(!showBluetoothPanel);
@@ -692,7 +702,9 @@ export function MenuBar({
 
           {/* Time */}
           <div className="flex items-center gap-2 px-2">
-            <span className="text-sm">{format(currentTime, "EEE MMM d")}</span>
+            <span className="text-sm hidden md:block ">
+              {format(currentTime, "EEE MMM d")}
+            </span>
             <span className="text-sm font-medium">
               {format(currentTime, "h:mm a")}
             </span>

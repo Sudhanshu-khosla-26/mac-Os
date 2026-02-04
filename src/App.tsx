@@ -349,7 +349,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen max-h-screen overflow-hidden"
+      className="h-screen w-screen overflow-hidden fixed inset-0 touch-none"
       style={{
         backgroundImage: "url('/macbook-m3.jpg')",
         backgroundSize: "cover",
