@@ -341,7 +341,7 @@ export function Terminal({ isDark }: TerminalProps) {
 
       case "resume":
         const link = document.createElement("a");
-        link.href = "/Sudhanshu_Khosla_Resume.pdf";
+        link.href = "/SUDHANSHU-KHOSLA-RESUME.pdf";
         link.download = "Sudhanshu_Khosla_Resume.pdf";
         link.click();
         return ["\x1b[32m✓ Resumé download started!\x1b[0m", ""];
