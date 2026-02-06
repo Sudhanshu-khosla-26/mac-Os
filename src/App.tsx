@@ -330,11 +330,11 @@ function App() {
         case "gallery":
           return <Gallery isDark={isDark} />;
         case "projects":
-          return <Projects isDark={isDark} />;
+          return <Projects />;
         case "skills":
-          return <Skills isDark={isDark} />;
+          return <Skills />;
         case "experience":
-          return <Experience isDark={isDark} />;
+          return <Experience />;
         case "contact":
           return <Contact isDark={isDark} />;
         case "resume":
