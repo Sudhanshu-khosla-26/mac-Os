@@ -8,7 +8,6 @@ import {
   Palette,
   Terminal,
   Cpu,
-  Sparkles,
   ChevronRight,
   Menu,
   X,

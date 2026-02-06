@@ -5,7 +5,6 @@ import {
   Calendar,
   MapPin,
   ChevronDown,
-  Sparkles,
   Code2,
   Users,
   Trophy,

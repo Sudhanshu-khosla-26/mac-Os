@@ -4,11 +4,9 @@ import {
   ExternalLink,
   Github,
   ArrowLeft,
-  Folder,
   Layers,
   CheckCircle2,
   ArrowUpRight,
-  Sparkles,
   TrendingUp,
 } from "lucide-react";
 
