@@ -290,7 +290,7 @@ export function Settings({ isDark, onToggleTheme }: SettingsProps) {
 
                     {setting.type === "select" && (
                       <select
-                        onChange={(e) => {
+                        onChange={() => {
                           // ONLY run theme toggle for theme setting
                           if (setting.id === "theme") {
                             onToggleTheme();
