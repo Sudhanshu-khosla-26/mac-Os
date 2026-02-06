@@ -23,10 +23,12 @@ export function Spotlight({
   onClose,
   isDark,
 }: SpotlightProps) {
-  const getIconComponent = (iconName: string) => {
-    const Icon = (LucideIcons as any)[iconName];
-    return Icon || LucideIcons.Circle;
-  };
+  // const getIconComponent = (iconName: string) => {
+  //   const Icon = (LucideIcons as any)[iconName];
+  //   return Icon || LucideIcons.Circle;
+  // };
+
+  console.log("results", results);
 
   const handleResultClick = (result: SpotlightResult) => {
     result.action();
@@ -37,65 +39,72 @@ export function Spotlight({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* BACKDROP */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[2000] bg-black/30"
             onClick={onClose}
+            className="fixed inset-0 z-[2000] bg-black/35"
           />
 
-          {/* Spotlight Container */}
+          {/* SPOTLIGHT PANEL */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-1/4 inset-x-0 mx-auto z-[2001] w-[600px] max-w-[90vw]"
+            initial={{ opacity: 0, y: -30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -30, scale: 0.96 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="
+              fixed 
+           
+              top-[20%] 
+              z-[2001]
+              w-[600px] 
+              max-w-[92vw]
+               inset-x-0 mx-auto 
+
+            "
           >
             <div
               className={`rounded-xl overflow-hidden ${
-                isDark ? "bg-[#1e1e1e]/95" : "bg-white/95"
+                isDark ? "bg-[#1f1f1fcc]" : "bg-white/90"
               }`}
               style={{
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+                backdropFilter: "blur(30px)",
+                WebkitBackdropFilter: "blur(30px)",
+                boxShadow:
+                  "0 40px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)",
               }}
             >
-              {/* Search Input */}
-              <div
-                className={`p-4 border-b ${
-                  isDark ? "border-white/10" : "border-black/10"
-                }`}
-              >
+              {/* SEARCH BAR */}
+              <div className="px-5 py-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
                   <LucideIcons.Search
                     className={`w-5 h-5 ${
-                      isDark ? "text-white/50" : "text-black/50"
+                      isDark ? "text-white/40" : "text-black/40"
                     }`}
                   />
+
                   <input
-                    type="text"
                     value={query}
                     onChange={(e) => {
                       setQuery(e.target.value);
                       setSelectedIndex(0);
                     }}
                     placeholder="Spotlight Search"
+                    autoFocus
                     className={`flex-1 bg-transparent outline-none text-lg ${
                       isDark
-                        ? "text-white placeholder:text-white/40"
-                        : "text-gray-900 placeholder:text-black/40"
+                        ? "text-white placeholder:text-white/30"
+                        : "text-black placeholder:text-black/30"
                     }`}
-                    autoFocus
                   />
+
                   <div
-                    className={`text-xs px-2 py-1 rounded ${
+                    className={`text-[11px] px-2 py-[2px] rounded ${
                       isDark
-                        ? "bg-white/10 text-white/60"
-                        : "bg-black/10 text-black/60"
+                        ? "bg-white/10 text-white/50"
+                        : "bg-black/10 text-black/50"
                     }`}
                   >
                     ⌘ Space
@@ -103,77 +112,72 @@ export function Spotlight({
                 </div>
               </div>
 
-              {/* Results */}
-              <div className="max-h-[400px] overflow-auto">
+              {/* RESULTS */}
+              <div className="max-h-[420px] overflow-y-auto py-2">
                 {results.length === 0 ? (
                   <div
-                    className={`p-8 text-center ${
-                      isDark ? "text-white/50" : "text-black/50"
+                    className={`px-6 py-10 text-center ${
+                      isDark ? "text-white/40" : "text-black/40"
                     }`}
                   >
-                    No results found
+                    No results
                   </div>
                 ) : (
-                  <div className="p-2">
-                    {results.map((result, index) => {
-                      const Icon = getIconComponent(result.icon);
-                      const isSelected = index === selectedIndex;
+                  results.map((result, index) => {
+                    // const Icon = getIconComponent(result.icon);
+                    const isSelected = index === selectedIndex;
 
-                      return (
-                        <button
-                          key={result.id}
-                          onClick={() => handleResultClick(result)}
-                          onMouseEnter={() => setSelectedIndex(index)}
-                          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                            isSelected
-                              ? "bg-[#007aff] text-white"
-                              : isDark
-                                ? "hover:bg-white/10 text-white"
-                                : "hover:bg-black/10 text-gray-900"
-                          }`}
-                        >
+                    return (
+                      <button
+                        key={result.id}
+                        onClick={() => handleResultClick(result)}
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        className={`w-full flex items-center gap-3 px-5 py-3 text-left transition ${
+                          isSelected
+                            ? isDark
+                              ? "bg-white/10"
+                              : "bg-black/10"
+                            : ""
+                        }`}
+                      >
+                        <img
+                          src={`/Icons/${result.icon}`}
+                          className="w-[36px] h-[36px] opacity-80"
+                          alt={result.name}
+                        />
+                        {/* <Icon className="w-[20px] h-[20px] opacity-80" /> */}
+
+                        <div className="flex-1">
+                          <div className="text-[15px] font-medium">
+                            {result.name}
+                          </div>
                           <div
-                            className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              isSelected ? "bg-white/20" : "bg-[#007aff]/10"
+                            className={`text-xs ${
+                              isDark ? "text-white/40" : "text-black/40"
                             }`}
                           >
-                            <Icon className="w-5 h-5" />
+                            {result.type === "app" ? "Application" : "Command"}
                           </div>
-                          <div className="flex-1 text-left">
-                            <div className="font-medium">{result.name}</div>
-                            <div
-                              className={`text-sm ${
-                                isSelected ? "text-white/70" : "text-gray-500"
-                              }`}
-                            >
-                              {result.type === "app"
-                                ? "Application"
-                                : "Command"}
-                            </div>
-                          </div>
-                          {isSelected && (
-                            <LucideIcons.ArrowRight className="w-4 h-4" />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
+                        </div>
+
+                        {isSelected && (
+                          <LucideIcons.CornerDownLeft className="w-4 h-4 opacity-60" />
+                        )}
+                      </button>
+                    );
+                  })
                 )}
               </div>
 
-              {/* Footer */}
+              {/* FOOTER */}
               <div
-                className={`px-4 py-2 text-xs flex items-center justify-between ${
+                className={`px-5 py-2 text-xs ${
                   isDark
-                    ? "bg-white/5 text-white/40"
-                    : "bg-black/5 text-black/40"
+                    ? "border-t border-white/10 text-white/40"
+                    : "border-t border-black/10 text-black/40"
                 }`}
               >
-                <div className="flex items-center gap-4">
-                  <span>↑↓ to navigate</span>
-                  <span>↵ to open</span>
-                  <span>esc to close</span>
-                </div>
+                ↑↓ Navigate · Enter Open · Esc Close
               </div>
             </div>
           </motion.div>

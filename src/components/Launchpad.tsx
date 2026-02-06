@@ -21,13 +21,22 @@ export function Launchpad({
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile for focus and scroll logic
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024); // Using 1024 for iPad support
     checkMobile();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) onClose();
+    };
+
     window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const filteredApps = apps.filter((app) =>
     app.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -55,7 +64,12 @@ export function Launchpad({
           className="fixed inset-0 z-[5000] overflow-hidden"
         >
           {/* --- BACKGROUND TAP-TO-CLOSE LAYER --- */}
-          <div className="absolute inset-0 z-[5001]" onClick={onClose}>
+          <div
+            className="absolute inset-0 z-[5001]"
+            onClick={() => {
+              if (isMobile) onClose();
+            }}
+          >
             {/* Blurred Wallpaper */}
             <div
               className="absolute inset-0"

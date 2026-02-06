@@ -197,7 +197,7 @@ export function Resume({ isDark }: ResumeProps) {
                 Full Stack Developer
               </p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 border rounded text-sm font-semibold">
+            <button className="flex items-center h-fit w-fit gap-2 px-4 py-2 border rounded-lg  text-sm font-semibold">
               <Download className="w-4 h-4" />
               Download Resume
             </button>

@@ -347,8 +347,9 @@ export function Contact({ isDark }: ContactProps) {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className={`w-full mt-8 flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 ${
+                // disabled={isSubmitting}
+                disabled={true}
+                className={`w-full cursor-not-allowed mt-8 flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 ${
                   isSubmitting
                     ? "bg-gray-400 cursor-not-allowed text-white"
                     : "bg-[#007aff] hover:bg-[#0066d6] text-white"

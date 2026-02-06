@@ -105,7 +105,9 @@ export const INITIAL_APPS: App[] = [
   },
 ];
 
-const isMobile = () => typeof window !== "undefined" && window.innerWidth < 768;
+// Change 768 to 1024 to cover most iPads in portrait/landscape
+const isMobile = () =>
+  typeof window !== "undefined" && window.innerWidth <= 1024;
 // const MOBILE_DOCK_HEIGHT = 90;
 
 const createWindowState = (app: App, zIndex: number): WindowState => {
@@ -115,7 +117,7 @@ const createWindowState = (app: App, zIndex: number): WindowState => {
     about: { width: 700, height: 500 },
     gallery: { width: 700, height: 500 },
     projects: { width: 750, height: 500 },
-    skills: { width: 750, height: 500 },
+    skills: { width: 800, height: 500 },
     experience: { width: 800, height: 500 },
     resume: { width: 900, height: 500 },
     contact: { width: 800, height: 500 },

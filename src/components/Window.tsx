@@ -33,6 +33,15 @@ export function Window({
   const dragStart = useRef({ x: 0, y: 0, windowX: 0, windowY: 0 });
   const resizeStart = useRef({ x: 0, y: 0, width: 0, height: 0 });
 
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobileOrTablet(window.innerWidth <= 1024); // iPad landscape and below
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
   const handleMouseDown = useCallback(() => {
     onFocus();
   }, [onFocus]);
@@ -242,24 +251,30 @@ export function Window({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onMaximize();
+                    if (!isMobileOrTablet) onMaximize(); // 👈 Disable click
                   }}
-                  className="w-3 h-3 rounded-full bg-[#28c840] hover:bg-[#28c840] flex items-center justify-center group transition-all"
+                  className={`w-3 h-3 rounded-full flex items-center justify-center group transition-all ${
+                    isMobileOrTablet
+                      ? "bg-gray-400 opacity-50 cursor-default"
+                      : "bg-[#28c840] hover:bg-[#28c840]"
+                  }`}
                   style={{ boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.1)" }}
                 >
-                  <svg
-                    className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                    viewBox="0 0 8 8"
-                    fill="none"
-                  >
-                    <path
-                      d="M2 4L4 2L6 4M4 2V6"
-                      stroke="#004d00"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  {!isMobileOrTablet && ( // 👈 Hide icon on mobile
+                    <svg
+                      className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      viewBox="0 0 8 8"
+                      fill="none"
+                    >
+                      <path
+                        d="M2 4L4 2L6 4M4 2V6"
+                        stroke="#004d00"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
                 </button>
               </div>
 

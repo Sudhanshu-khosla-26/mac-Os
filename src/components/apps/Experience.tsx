@@ -1,10 +1,15 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Calendar, MapPin, ChevronRight, ExternalLink } from 'lucide-react';
-
-interface ExperienceProps {
-  isDark: boolean;
-}
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Building2,
+  Calendar,
+  MapPin,
+  ChevronDown,
+  Sparkles,
+  Code2,
+  Users,
+  Trophy,
+} from "lucide-react";
 
 interface Job {
   id: string;
@@ -16,279 +21,331 @@ interface Job {
   endDate: string;
   description: string[];
   technologies: string[];
-  color: string;
-  link?: string;
+  gradient: string;
+  iconColor: string;
 }
 
 const EXPERIENCES: Job[] = [
   {
-    id: 'nitya',
-    company: 'Nitya Consulting Services',
-    role: 'Full Stack Developer Intern',
-    type: 'Remote',
-    location: 'Remote',
-    startDate: 'Aug 2025',
-    endDate: 'Nov 2025',
+    id: "nitya",
+    company: "Nitya Consulting Services",
+    role: "Full Stack Developer Intern",
+    type: "Remote",
+    location: "Remote",
+    startDate: "Aug 2025",
+    endDate: "Nov 2025",
     description: [
-      'Developed AI recruitment platforms using Next.js for automated candidate screening, bulk resume analysis, and JD relevance scoring',
-      'Implemented automated interviews using 3D AI agent (Vapi) with structured evaluation rounds, reducing manual screening effort by 60%',
-      'Designed database architecture, ER diagrams, and workflows supporting internal and external applications',
-      'Built real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving efficiency by 50%',
+      "Developed AI recruitment platforms using Next.js for automated candidate screening, bulk resume analysis, and JD relevance scoring",
+      "Implemented automated interviews using 3D AI agent (Vapi) with structured evaluation rounds, reducing manual screening effort by 60%",
+      "Designed database architecture, ER diagrams, and workflows supporting internal and external applications",
+      "Built real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving efficiency by 50%",
     ],
-    technologies: ['Next.js', 'Vapi AI', 'n8n', 'PostgreSQL', 'Prisma', 'OpenAI'],
-    color: '#007aff',
+    technologies: [
+      "Next.js",
+      "Vapi AI",
+      "n8n",
+      "PostgreSQL",
+      "Prisma",
+      "OpenAI",
+    ],
+    gradient: "from-primary to-blue-500",
+    iconColor: "text-primary",
   },
   {
-    id: 'iisd',
-    company: 'International Institute of SDGs and Public Policy Research',
-    role: 'Full Stack Developer Intern',
-    type: 'Remote',
-    location: 'Remote',
-    startDate: 'April 2025',
-    endDate: 'May 2025',
+    id: "iisd",
+    company: "International Institute of SDGs and Public Policy Research",
+    role: "Full Stack Developer Intern",
+    type: "Remote",
+    location: "Remote",
+    startDate: "April 2025",
+    endDate: "May 2025",
     description: [
-      'Developed a comprehensive Intern Management Portal using the MERN stack, enabling HRs, Admins, and Interns to interact seamlessly',
-      'Implemented features like attendance tracking, batch creation, task assignment, performance-based ranking, and role-based access control',
-      'Designed user workflows for promoting/demoting interns, permission-based task actions, and task review with point-based evaluation',
-      'Collaborated with cross-functional teams, gaining hands-on experience in team leadership, agile development and end-to-end deployment',
+      "Developed a comprehensive Intern Management Portal using the MERN stack, enabling HRs, Admins, and Interns to interact seamlessly",
+      "Implemented features like attendance tracking, batch creation, task assignment, performance-based ranking, and role-based access control",
+      "Designed user workflows for promoting/demoting interns, permission-based task actions, and task review with point-based evaluation",
+      "Collaborated with cross-functional teams, gaining hands-on experience in team leadership, agile development and end-to-end deployment",
     ],
-    technologies: ['MERN Stack', 'Redux Toolkit', 'JWT', 'Tailwind CSS'],
-    color: '#34c759',
+    technologies: ["MERN Stack", "Redux Toolkit", "JWT", "Tailwind CSS"],
+    gradient: "from-success to-emerald-400",
+    iconColor: "text-success",
   },
 ];
 
-export function Experience({ isDark }: ExperienceProps) {
-  const [expandedJobs, setExpandedJobs] = useState<string[]>(['nitya']);
+interface LeadershipItem {
+  icon: typeof Building2;
+  title: string;
+  organization: string;
+  description: string;
+  gradient: string;
+  iconColor: string;
+}
+
+const LEADERSHIP: LeadershipItem[] = [
+  {
+    icon: Code2,
+    title: "Web Development Lead",
+    organization: "Code Geeks - Official Coding Society of GTB4CEC",
+    description:
+      "Led web development initiatives and mentored junior developers",
+    gradient: "from-warning to-orange-400",
+    iconColor: "text-warning",
+  },
+  {
+    icon: Trophy,
+    title: "Hackathon Website Developer",
+    organization: "Code-Zen - College Hackathon",
+    description:
+      "Developed the official website for the college hackathon event",
+    gradient: "from-accent to-pink-500",
+    iconColor: "text-accent",
+  },
+  {
+    icon: Users,
+    title: "Student Coordinator",
+    organization: "College Tech Fest",
+    description:
+      "Developed the official website and oversaw event organization",
+    gradient: "from-success to-teal-400",
+    iconColor: "text-success",
+  },
+];
+
+export function Experience() {
+  const [expandedJobs, setExpandedJobs] = useState<string[]>(["nitya"]);
 
   const toggleExpanded = (jobId: string) => {
-    setExpandedJobs(prev => 
-      prev.includes(jobId) 
-        ? prev.filter(id => id !== jobId)
-        : [...prev, jobId]
+    setExpandedJobs((prev) =>
+      prev.includes(jobId)
+        ? prev.filter((id) => id !== jobId)
+        : [...prev, jobId],
     );
   };
 
   return (
-    <div className={`w-full h-full overflow-auto ${isDark ? 'bg-[#0a0a0a]' : 'bg-gray-50'}`}>
-      {/* Header */}
-      <div className={`sticky top-0 z-10 px-6 py-4 border-b ${
-        isDark ? 'bg-[#0a0a0a]/95 border-white/10' : 'bg-gray-50/95 border-black/10'
-      }`}>
-        <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          Experience
-        </h1>
-        <p className={`mt-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-          My professional journey and internships
-        </p>
+    <div className="min-h-screen bg-background overflow-auto">
+      {/* Background Effects */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-glow-pulse" />
+        <div
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-glow-pulse"
+          style={{ animationDelay: "1.5s" }}
+        />
       </div>
 
-      {/* Timeline */}
-      <div className="p-6">
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className={`absolute left-6 top-0 bottom-0 w-px ${
-            isDark ? 'bg-white/10' : 'bg-black/10'
-          }`} />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-3">
+            Experience
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-xl">
+            Building innovative solutions and leading development teams across
+            various domains.
+          </p>
+        </motion.header>
 
-          {/* Experience Items */}
-          <div className="space-y-6">
-            {EXPERIENCES.map((job, index) => {
-              const isExpanded = expandedJobs.includes(job.id);
+        {/* Timeline */}
+        <section className="mb-16">
+          <div className="relative">
+            {/* Timeline Line */}
+            <div className="absolute left-4 sm:left-6 top-8 bottom-8 w-px bg-gradient-to-b from-primary/50 via-accent/30 to-transparent" />
 
-              return (
-                <motion.div
-                  key={job.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="relative pl-14"
-                >
-                  {/* Timeline Dot */}
-                  <div
-                    className="absolute left-4 top-2 w-4 h-4 rounded-full border-2"
-                    style={{ 
-                      borderColor: job.color,
-                      backgroundColor: isDark ? '#0a0a0a' : '#f9fafb',
-                    }}
-                  />
+            {/* Experience Cards */}
+            <div className="space-y-6">
+              {EXPERIENCES.map((job, index) => {
+                const isExpanded = expandedJobs.includes(job.id);
 
-                  {/* Content Card */}
-                  <div
-                    className={`rounded-xl overflow-hidden transition-all ${
-                      isDark ? 'bg-[#1e1e1e]' : 'bg-white'
-                    }`}
-                    style={{ border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}
+                return (
+                  <motion.article
+                    key={job.id}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.15, duration: 0.5 }}
+                    className="relative pl-12 sm:pl-16"
                   >
-                    {/* Header */}
-                    <button
-                      onClick={() => toggleExpanded(job.id)}
-                      className="w-full p-5 text-left"
+                    {/* Timeline Dot */}
+                    <motion.div
+                      className={`absolute left-2 sm:left-4 top-6 timeline-dot border-primary ${isExpanded ? "timeline-dot-active bg-primary" : "bg-background"}`}
+                      whileHover={{ scale: 1.2 }}
+                      style={{ color: "hsl(var(--primary))" }}
+                    />
+
+                    {/* Card */}
+                    <motion.div
+                      className="glass-card-hover overflow-hidden"
+                      whileHover={{ y: -2 }}
                     >
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-4">
-                          {/* Company Logo Placeholder */}
-                          <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: `${job.color}20` }}
-                          >
-                            <Building2 className="w-6 h-6" style={{ color: job.color }} />
-                          </div>
-
-                          <div>
-                            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {job.role}
-                            </h3>
-                            <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                              {job.company} · {job.type}
-                            </p>
-                            <div className={`flex items-center gap-4 mt-2 text-sm ${
-                              isDark ? 'text-white/40' : 'text-gray-500'
-                            }`}>
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-3 h-3" />
-                                {job.startDate} - {job.endDate}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <MapPin className="w-3 h-3" />
-                                {job.location}
-                              </span>
+                      {/* Card Header */}
+                      <button
+                        onClick={() => toggleExpanded(job.id)}
+                        className="w-full p-5 sm:p-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-2xl"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-4">
+                            {/* Company Icon */}
+                            <div
+                              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${job.gradient} p-0.5 flex-shrink-0`}
+                            >
+                              <div className="w-full h-full rounded-[10px] bg-card flex items-center justify-center">
+                                <Building2
+                                  className={`w-5 h-5 sm:w-6 sm:h-6 ${job.iconColor}`}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </div>
 
-                        <ChevronRight
-                          className={`w-5 h-5 transition-transform ${
-                            isExpanded ? 'rotate-90' : ''
-                          } ${isDark ? 'text-white/40' : 'text-gray-400'}`}
-                        />
-                      </div>
-                    </button>
-
-                    {/* Expanded Content */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className={`border-t ${isDark ? 'border-white/10' : 'border-black/10'}`}
-                        >
-                          <div className="p-5">
-                            {/* Description */}
-                            <ul className={`space-y-2 ${isDark ? 'text-white/70' : 'text-gray-600'}`}>
-                              {job.description.map((item, i) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: job.color }} />
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-
-                            {/* Technologies */}
-                            <div className="mt-4">
-                              <h4 className={`text-sm font-medium mb-2 ${
-                                isDark ? 'text-white/40' : 'text-gray-400'
-                              }`}>
-                                Technologies
-                              </h4>
-                              <div className="flex flex-wrap gap-2">
-                                {job.technologies.map((tech) => (
-                                  <span
-                                    key={tech}
-                                    className={`px-3 py-1 rounded-full text-sm ${
-                                      isDark 
-                                        ? 'bg-white/10 text-white/70' 
-                                        : 'bg-black/10 text-gray-600'
-                                    }`}
-                                  >
-                                    {tech}
-                                  </span>
-                                ))}
+                            <div className="min-w-0">
+                              <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-1 leading-tight">
+                                {job.role}
+                              </h3>
+                              <p className="text-sm sm:text-base text-muted-foreground mb-2">
+                                {job.company}
+                              </p>
+                              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1.5">
+                                  <Calendar className="w-3.5 h-3.5" />
+                                  {job.startDate} — {job.endDate}
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                  <MapPin className="w-3.5 h-3.5" />
+                                  {job.location}
+                                </span>
+                                <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                                  {job.type}
+                                </span>
                               </div>
                             </div>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+                          <motion.div
+                            animate={{ rotate: isExpanded ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="flex-shrink-0 mt-1"
+                          >
+                            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                          </motion.div>
+                        </div>
+                      </button>
+
+                      {/* Expanded Content */}
+                      <AnimatePresence>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-border/50">
+                              <div className="pt-5">
+                                {/* Achievements */}
+                                <ul className="space-y-3 mb-6">
+                                  {job.description.map((item, i) => (
+                                    <motion.li
+                                      key={i}
+                                      initial={{ opacity: 0, x: -10 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: i * 0.1 }}
+                                      className="flex items-start gap-3 text-sm sm:text-base text-foreground/80"
+                                    >
+                                      <span
+                                        className={`experience-bullet bg-gradient-to-br ${job.gradient}`}
+                                      />
+                                      <span className="leading-relaxed">
+                                        {item}
+                                      </span>
+                                    </motion.li>
+                                  ))}
+                                </ul>
+
+                                {/* Technologies */}
+                                <div>
+                                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                                    Technologies
+                                  </h4>
+                                  <div className="flex flex-wrap gap-2">
+                                    {job.technologies.map((tech, i) => (
+                                      <motion.span
+                                        key={tech}
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 0.2 + i * 0.05 }}
+                                        className="tech-badge"
+                                      >
+                                        {tech}
+                                      </motion.span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Leadership Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-2xl font-bold text-foreground">
+              Leadership & Activities
+            </h2>
+          </div>
+
+          <div className="grid gap-4">
+            {LEADERSHIP.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + index * 0.1 }}
+                  whileHover={{ y: -2, scale: 1.01 }}
+                  className="glass-card p-5 transition-all duration-300 hover:border-border/80"
+                >
+                  <div className="flex items-start gap-4">
+                    <div
+                      className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} p-0.5 flex-shrink-0`}
+                    >
+                      <div className="w-full h-full rounded-[9px] bg-card flex items-center justify-center">
+                        <Icon className={`w-5 h-5 ${item.iconColor}`} />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-foreground mb-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-1.5">
+                        {item.organization}
+                      </p>
+                      <p className="text-sm text-foreground/70 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               );
             })}
           </div>
-        </div>
-
-        {/* Leadership Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className={`mt-8 p-6 rounded-xl ${
-            isDark ? 'bg-[#1e1e1e]' : 'bg-white'
-          }`}
-          style={{ border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}
-        >
-          <h2 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Leadership & Activities
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isDark ? 'bg-[#ff9500]/20' : 'bg-orange-100'
-              }`}>
-                <Building2 className={`w-5 h-5 ${isDark ? 'text-[#ff9500]' : 'text-orange-600'}`} />
-              </div>
-              <div>
-                <h3 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Web Development Lead
-                </h3>
-                <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                  Code Geeks - Official Coding Society of GTB4CEC
-                </p>
-                <p className={`text-sm mt-1 ${isDark ? 'text-white/40' : 'text-gray-500'}`}>
-                  Led web development initiatives and mentored junior developers
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isDark ? 'bg-[#af52de]/20' : 'bg-purple-100'
-              }`}>
-                <ExternalLink className={`w-5 h-5 ${isDark ? 'text-[#af52de]' : 'text-purple-600'}`} />
-              </div>
-              <div>
-                <h3 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Hackathon Website Developer
-                </h3>
-                <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                  Code-Zen - College Hackathon
-                </p>
-                <p className={`text-sm mt-1 ${isDark ? 'text-white/40' : 'text-gray-500'}`}>
-                  Developed the official website for the college hackathon event
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isDark ? 'bg-[#34c759]/20' : 'bg-green-100'
-              }`}>
-                <Calendar className={`w-5 h-5 ${isDark ? 'text-[#34c759]' : 'text-green-600'}`} />
-              </div>
-              <div>
-                <h3 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Student Coordinator
-                </h3>
-                <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                  College Tech Fest
-                </p>
-                <p className={`text-sm mt-1 ${isDark ? 'text-white/40' : 'text-gray-500'}`}>
-                  Developed the official website and oversaw event organization
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        </motion.section>
       </div>
     </div>
   );
 }
+
+export default Experience;

@@ -75,9 +75,22 @@ function App() {
   } = useWindowManager();
 
   const { isDark, toggleTheme } = useTheme();
+  const [isMobile, setIsMobile] = useState(false);
   const [launchpadOpen, setLaunchpadOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"icon" | "list" | "column">("icon");
   const [bootComplete, setBootComplete] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check initial size
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const {
     isOpen: spotlightOpen,
@@ -351,7 +364,7 @@ function App() {
     <div
       className="h-screen w-screen overflow-hidden fixed inset-0 touch-none"
       style={{
-        backgroundImage: "url('/macbook-m3.jpg')",
+        backgroundImage: `url('${isMobile ? "/mobile.jfif" : "/macbook-m3.jpg"}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
