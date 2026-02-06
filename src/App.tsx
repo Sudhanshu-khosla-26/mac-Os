@@ -75,23 +75,31 @@ function App() {
   } = useWindowManager();
 
   const { isDark, toggleTheme } = useTheme();
-  const [isMobile, setIsMobile] = useState(false);
+
   const [launchpadOpen, setLaunchpadOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"icon" | "list" | "column">("icon");
   const [bootComplete, setBootComplete] = useState(false);
+  // Replace the old [isMobile, setIsMobile] state
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop",
+  );
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      const width = window.innerWidth;
+      if (width < 768) {
+        setDeviceType("mobile");
+      } else if (width >= 768 && width < 1024) {
+        setDeviceType("tablet");
+      } else {
+        setDeviceType("desktop");
+      }
     };
 
-    // Check initial size
     handleResize();
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   const {
     isOpen: spotlightOpen,
     query: spotlightQuery,
@@ -364,7 +372,13 @@ function App() {
     <div
       className="h-screen w-screen overflow-hidden fixed inset-0 touch-none"
       style={{
-        backgroundImage: `url('${isMobile ? "/mobile.jfif" : "/macbook-m3.jpg"}')`,
+        backgroundImage: `url('${
+          deviceType === "mobile"
+            ? "/download2.jfif"
+            : deviceType === "tablet"
+              ? "/download5.jfif"
+              : "/macbook-m3.jpg"
+        }')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

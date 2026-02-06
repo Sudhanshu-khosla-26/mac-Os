@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -38,32 +40,31 @@ const PROJECTS: Project[] = [
     description: "One-click deployment platform with real-time log tracking",
     longDescription:
       "A comprehensive deployment platform that streamlines the deployment process with one-click deployments, real-time Kafka log tracking, subdomain-based access, and ClickHouse analytics for monitoring. Built to handle production-grade deployments with enterprise-level reliability.",
-    image:
-      "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&h=500&fit=crop",
+    image: "/projects/Screenshot (1186).png",
     techStack: [
-      "AWS ECS/ECR",
+      "AWS (ECS/ECR/S3/EC2)",
       "PostgreSQL",
       "Kafka",
       "Prisma",
       "ClickHouse",
       "Docker",
+      "Node.js",
       "React.js",
     ],
     category: "DevOps",
-    year: "2024",
-    github: "https://github.com",
-    demo: "https://demo.com",
+    year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26",
+    demo: "",
     metrics: [
-      { label: "Active Users", value: "2.5K+" },
       { label: "Uptime", value: "99.9%" },
       { label: "Deploy Speed", value: "70% faster" },
     ],
     featured: true,
     highlights: [
-      "Real-time log streaming with Kafka for instant deployment feedback",
-      "Automatic subdomain-based service access with SSL certificates",
-      "ClickHouse analytics dashboard with performance insights",
-      "Docker containerization with automated scaling",
+      "Real-time log tracking with Kafka and ClickHouse analytics",
+      "One-click deployments using AWS ECS, ECR, and S3",
+      "Subdomain-based access with reverse proxy and Docker",
+      "Enhanced status tracking and simplified live previews",
     ],
     gradient: "from-primary to-blue-500",
     iconColor: "text-primary",
@@ -73,60 +74,88 @@ const PROJECTS: Project[] = [
     name: "VideoTube",
     description: "Mood-based video recommendation platform",
     longDescription:
-      "An intelligent video platform with mood-based recommendations using Gemini AI, featuring user authentication, video uploads, and interactive features like comments and subscriptions. The platform analyzes user emotions and preferences to deliver personalized content experiences.",
-    image:
-      "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=500&fit=crop",
-    techStack: ["React.js", "Node.js", "MongoDB", "Cloudinary", "Gemini AI"],
-    category: "AI/ML",
-    year: "2024",
-    github: "https://github.com",
-    demo: "https://demo.com",
-    metrics: [
-      { label: "Active Users", value: "5K+" },
-      { label: "Match Accuracy", value: "85%" },
-      { label: "Engagement", value: "3x increase" },
+      "An intelligent video platform with mood-based recommendations using Gemini AI, featuring user authentication, video uploads, and interactive features like comments and subscriptions.",
+    image: "/projects/Screenshot (1182).png",
+    techStack: [
+      "React.js",
+      "Node.js",
+      "MongoDB",
+      "Cloudinary",
+      "Gemini AI",
+      "JWT",
     ],
-    featured: true,
+    category: "AI/ML",
+    year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26",
+    metrics: [
+      { label: "Match Accuracy", value: "85%" },
+      { label: "Load Times", value: "Optimized" },
+    ],
+    featured: false,
     highlights: [
-      "AI-powered mood detection using Google Gemini API",
-      "Secure video streaming with Cloudinary CDN integration",
-      "Real-time notifications for comments and subscriptions",
-      "JWT-based authentication with refresh token rotation",
+      "AI-powered mood-based video recommendations via Gemini AI",
+      "Secure authentication and JWT-based session management",
+      "Enhanced video load times through Cloudinary integration",
+      "Full interactive features including like, comment, and subscribe",
     ],
     gradient: "from-rose-500 to-red-500",
     iconColor: "text-rose-500",
   },
   {
-    id: "ai-recruitment",
-    name: "AI Recruitment Platform",
-    description: "Automated candidate screening with 3D AI agents",
+    id: "avinya",
+    name: "Avinya Website",
+    description: "Official tech fest platform with 1000+ viewers",
     longDescription:
-      "An AI-powered recruitment platform featuring automated candidate screening, bulk resume analysis, JD relevance scoring, and 3D AI agent interviews using Vapi. The platform revolutionizes the hiring process by combining AI intelligence with human-like interactions.",
-    image:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=500&fit=crop",
+      "Developed the official website for Avinya, the college tech fest. Focused on high-performance animations using Framer Motion and significant SEO optimization to handle high traffic.",
+    image: "/projects/Screenshot (1183).png",
+    techStack: ["Next.js", "Framer Motion", "Tailwind CSS", "SEO"],
+    category: "Full Stack",
+    year: "2025",
+    demo: "https://avinya-2025-nu.vercel.app/",
+    metrics: [
+      { label: "Viewers", value: "1000+" },
+      { label: "Days", value: "10" },
+    ],
+    featured: false,
+    highlights: [
+      "Reached 1000+ viewers in just 10 days post-launch",
+      "Fully SEO optimized for maximum visibility and engagement",
+      "Implemented complex UI animations with Framer Motion",
+      "Managed event organization and student coordination",
+    ],
+    gradient: "from-orange-500 to-yellow-500",
+    iconColor: "text-orange-500",
+  },
+
+  {
+    id: "recruito-ai",
+    name: "Recruito AI",
+    description:
+      "AI recruitment platform with 3D agents and automated screening",
+    longDescription:
+      "Developed an AI recruitment platform using Next.js for automated candidate screening and JD relevance scoring. Features a 3D AI agent (Vapi) for structured interviews, significantly reducing manual screening efforts.",
+    image: "/projects/Screenshot (1185).png",
     techStack: [
       "Next.js",
       "Vapi AI",
       "PostgreSQL",
       "Prisma",
-      "OpenAI",
+      "3D AI Agent",
       "Tailwind CSS",
     ],
     category: "AI/ML",
-    year: "2024",
-    github: "https://github.com",
-    demo: "https://demo.com",
+    year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26",
     metrics: [
-      { label: "Companies", value: "150+" },
+      { label: "Manual Effort", value: "-60%" },
       { label: "Accuracy", value: "90%" },
-      { label: "Time Saved", value: "60%" },
     ],
     featured: true,
     highlights: [
-      "3D AI interviewer agents with natural conversation capabilities",
-      "Bulk resume processing with OpenAI-powered analysis",
-      "JD-candidate matching algorithm with relevance scoring",
-      "Real-time interview transcription and sentiment analysis",
+      "Implemented automated interviews using 3D AI agent (Vapi)",
+      "Reduced manual screening effort by 60% with structured evaluation",
+      "Bulk resume analysis and JD relevance scoring architecture",
+      "Designed database architecture and ER diagrams for scale",
     ],
     gradient: "from-success to-emerald-400",
     iconColor: "text-success",
@@ -136,27 +165,107 @@ const PROJECTS: Project[] = [
     name: "Real Estate Automation",
     description: "Lead management with AI-powered calls",
     longDescription:
-      "A real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving operational efficiency by 50%. The system handles lead qualification, follow-ups, and scheduling with minimal human intervention.",
-    image:
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop",
+      "A real estate automation platform integrating n8n and Vapi AI for automated calls and lead management, improving operational efficiency by 50%.",
+    image: "/projects/Screenshot (1184).png",
     techStack: ["Next.js", "n8n", "Vapi AI", "PostgreSQL", "Prisma"],
     category: "Automation",
-    year: "2024",
-    github: "https://github.com",
+    year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26",
     metrics: [
-      { label: "Agents", value: "50+" },
       { label: "Efficiency", value: "+50%" },
       { label: "Daily Leads", value: "200+" },
     ],
     featured: false,
     highlights: [
-      "50% improvement in operational efficiency",
-      "Automated lead follow-up with intelligent scheduling",
-      "Smart call routing based on lead quality scores",
-      "n8n workflow automation for complex business processes",
+      "Improved operational efficiency by 50% via AI automation",
+      "Automated calls and lead qualification using Vapi AI",
+      "n8n workflow integration for complex lead management",
+      "Reduced human intervention in routine follow-ups",
     ],
     gradient: "from-accent to-purple-500",
     iconColor: "text-accent",
+  },
+  {
+    id: "intern-portal",
+    name: "Intern Management Portal",
+    description: "Enterprise system designed to manage 5000+ users",
+    longDescription:
+      "Developed a comprehensive MERN stack portal for the International Institute of SDGs. The system enables HRs, Admins, and Interns to interact seamlessly, featuring attendance tracking, task assignment with point-based evaluation, and role-based access control.",
+    image: "/projects/Screenshot (632).png",
+    techStack: [
+      "MongoDB",
+      "Express.js",
+      "React.js",
+      "Node.js",
+      "Redux Toolkit",
+    ],
+    category: "Full Stack",
+    year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26",
+    metrics: [
+      { label: "User Capacity", value: "5000+" },
+      { label: "Stack", value: "MERN" },
+    ],
+    featured: true,
+    highlights: [
+      "Designed to handle and manage 5000+ users seamlessly",
+      "Implemented role-based access control and attendance tracking",
+      "Point-based task evaluation and performance-based ranking",
+      "Automated batch creation and permission-based actions",
+    ],
+    gradient: "from-blue-600 to-indigo-600",
+    iconColor: "text-blue-500",
+  },
+  {
+    id: "code-zen",
+    name: "Code-Zen Hackathon",
+    description: "Official platform for the college hackathon",
+    longDescription:
+      "Developed the official website for Code-Zen, the college hackathon. Managed registration flows and event roles as the Web Development Lead.",
+    image: "/projects/Screenshot (1189).png",
+    techStack: ["Next.js", "Tailwind CSS", "Node.js"],
+    category: "Full Stack",
+    year: "2025",
+    demo: "https://codezen-eight.vercel.app/",
+    metrics: [
+      { label: "Role", value: "Web Lead" },
+      { label: "Impact", value: "Event Success" },
+    ],
+    featured: false,
+    highlights: [
+      "Led web development for the official college hackathon platform",
+      "Built with Next.js for high performance and reliability",
+      "Managed registration flows and event role coordination",
+      "Integrated live links and event tracking features",
+    ],
+    gradient: "from-purple-600 to-blue-600",
+    iconColor: "text-purple-500",
+  },
+  {
+    id: "netflix-clone",
+    name: "Netflix Clone",
+    description: "Video streaming UI with TMDB and YouTube API",
+    longDescription:
+      "A pixel-perfect Netflix replica that fetches real-time movie data using TMDB and allows users to watch trailers via the YouTube Search API.",
+    image: "/projects/Screenshot (1188).png",
+    techStack: ["HTML", "CSS", "JavaScript", "TMDB API", "YouTube API"],
+    category: "Full Stack",
+    year: "2024",
+    demo: "https://codezen-eight.vercel.app/",
+    github: "https://github.com/Sudhanshu-khosla-26",
+    metrics: [
+      { label: "API", value: "TMDB/YT" },
+      { label: "UI", value: "Responsive" },
+    ],
+    featured: false,
+    highlights: [
+      "Dynamic data fetching using The Movies Database (TMDB) API",
+      "Integrated YouTube Search API for movie trailer playback",
+      "Custom responsive CSS layout mimicking original Netflix UI",
+      "Optimized search and filtering for movie discovery",
+    ],
+    gradient: "from-red-600 to-black",
+    iconColor: "text-red-600",
   },
 ];
 
@@ -187,34 +296,24 @@ function ProjectCard({
       onClick={onClick}
       className="group cursor-pointer glass-card-hover overflow-hidden flex flex-col h-full"
     >
-      {/* Image Section */}
-      <div className="relative aspect-video w-full overflow-hidden">
+      <div className="relative w-full aspect-video overflow-hidden rounded-t-lg bg-secondary">
         <img
-          src={project.image}
+          src={project.image || "/placeholder.svg"}
           alt={project.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-contain object-center transition-all duration-700 group-hover:scale-105 group-hover:brightness-105"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent" />
 
-        {/* {project.featured && (
-          <div className="absolute top-3 right-3">
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/90 text-primary-foreground backdrop-blur-sm">
-              <Sparkles className="w-3 h-3" />
-              Featured
-            </span>
-          </div>
-        )} */}
+        {/* Lighter dark gradient overlay - starts from 60% down */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% via-black/30 to-black/50 transition-opacity duration-500 group-hover:to-black/60 pointer-events-none" />
 
-        {/* Category tag */}
-        <div className="absolute bottom-3 left-3">
-          <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card/80 text-foreground backdrop-blur-sm border border-border/50">
+        {/* Category badge */}
+        <div className="absolute bottom-3 left-3 z-10">
+          <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card/90 text-foreground backdrop-blur-sm border border-border/50">
             {project.category}
           </span>
         </div>
       </div>
-
-      {/* Content Section */}
       <div className="p-5 flex flex-col flex-grow">
         <div className="flex items-start justify-between mb-3">
           <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
@@ -227,7 +326,6 @@ function ProjectCard({
           {project.description}
         </p>
 
-        {/* Tech Stack Preview */}
         <div className="flex items-center gap-2 pt-4 border-t border-border/50">
           <Layers className="w-4 h-4 text-muted-foreground flex-shrink-0" />
           <div className="flex gap-1.5 flex-wrap">
@@ -263,7 +361,6 @@ function ProjectDetails({
       transition={{ duration: 0.3 }}
       className="min-h-screen bg-background"
     >
-      {/* Sticky Header */}
       <div className="sticky top-0 z-20 backdrop-blur-xl bg-background/80 border-b border-border/50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
           <button
@@ -280,23 +377,21 @@ function ProjectDetails({
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        {/* Hero Image */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative rounded-2xl overflow-hidden mb-8 border border-border/50"
+          className="relative  overflow-hidden mb-8 "
         >
           <img
             src={project.image}
             alt={project.name}
-            className="w-full max-h-[500px] object-cover object-center"
+            className="w-full  border rounded-xl object-contain object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Main Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -333,21 +428,19 @@ function ProjectDetails({
             </section>
           </motion.div>
 
-          {/* Sidebar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="space-y-6"
           >
-            {/* Actions */}
             <div className="flex flex-col gap-3">
-              {project.demo && (
+              {project.demo !== "" && (
                 <a
                   href={project.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-3 cursor-pointer rounded-xl font-medium text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Live Demo
@@ -367,7 +460,6 @@ function ProjectDetails({
               )}
             </div>
 
-            {/* Metrics */}
             <div className="glass-card p-5">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-4 h-4 text-primary" />
@@ -392,7 +484,6 @@ function ProjectDetails({
               </div>
             </div>
 
-            {/* Tech Stack */}
             <div className="glass-card p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Layers className="w-4 h-4 text-accent" />
@@ -409,7 +500,6 @@ function ProjectDetails({
               </div>
             </div>
 
-            {/* Metadata */}
             <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t border-border/50">
               <span>{project.category}</span>
               <span>{project.year}</span>
@@ -446,7 +536,6 @@ export function Projects() {
 
   return (
     <div className="min-h-screen bg-background overflow-auto">
-      {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-glow-pulse" />
         <div
@@ -470,8 +559,7 @@ export function Projects() {
             exit={{ opacity: 0 }}
             className="relative z-10"
           >
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              {/* Header */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
               <motion.header
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -492,7 +580,6 @@ export function Projects() {
                 </div>
               </motion.header>
 
-              {/* Filter Tabs */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -517,7 +604,6 @@ export function Projects() {
                 })}
               </motion.div>
 
-              {/* Projects Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProjects.map((project, index) => (
                   <ProjectCard
