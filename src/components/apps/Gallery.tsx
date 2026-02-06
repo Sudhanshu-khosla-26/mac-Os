@@ -27,7 +27,7 @@ const GALLERY_IMAGES = [
   },
   {
     id: 3,
-    src: "/gallery/WhatsApp Image 2026-02-06 at 5.22.36 AM (1).webp",
+    src: "/gallery/WhatsApp Image 2026-02-06 at 8.02.35 PM.jpeg",
     alt: "Night campus look",
   },
 
