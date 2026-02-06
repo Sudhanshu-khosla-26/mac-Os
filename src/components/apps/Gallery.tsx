@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu } from "lucide-react";
+import { X, Menu, Image, Folder, MapPin, Users, Heart } from "lucide-react";
 
 interface GalleryProps {
   isDark: boolean;
 }
 
 const SIDEBAR_ITEMS = [
-  { id: "library", name: "Library", icon: "/icons/gicon1.svg" },
-  { id: "memories", name: "Memories", icon: "/icons/gicon2.svg" },
-  { id: "places", name: "Places", icon: "/icons/file.svg" },
-  { id: "people", name: "People", icon: "/icons/gicon4.svg" },
-  { id: "favorites", name: "Favorites", icon: "/icons/gicon5.svg" },
+  { id: "library", name: "Library", icon: Image },
+  { id: "memories", name: "Memories", icon: Folder },
+  { id: "places", name: "Places", icon: MapPin },
+  { id: "people", name: "People", icon: Users },
+  { id: "favorites", name: "Favorites", icon: Heart },
 ];
 
 const GALLERY_IMAGES = [
@@ -150,34 +150,35 @@ export function Gallery({ isDark }: GalleryProps) {
                 </button>
               </div>
               <ul className="space-y-1">
-                {SIDEBAR_ITEMS.map((item, index) => (
-                  <motion.li
-                    key={item.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <button
-                      onClick={() => handleSidebarClick(item.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
-                        selectedItem === item.id
-                          ? isDark
-                            ? "bg-blue-600 text-white"
-                            : "bg-blue-500 text-white"
-                          : isDark
-                            ? "hover:bg-white/5 text-white/70"
-                            : "hover:bg-black/5 text-gray-600"
-                      }`}
+                {SIDEBAR_ITEMS.map((item, index) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <motion.li
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
                     >
-                      <img
-                        src={item.icon}
-                        alt={item.name}
-                        className="w-5 h-5 brightness-110"
-                      />
-                      <p className="text-sm font-medium">{item.name}</p>
-                    </button>
-                  </motion.li>
-                ))}
+                      <button
+                        onClick={() => handleSidebarClick(item.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                          selectedItem === item.id
+                            ? isDark
+                              ? "bg-blue-600 text-white"
+                              : "bg-blue-500 text-white"
+                            : isDark
+                              ? "hover:bg-white/5 text-white/70"
+                              : "hover:bg-black/5 text-gray-600"
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+
+                        <p className="text-sm font-medium">{item.name}</p>
+                      </button>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </div>
           </motion.div>
