@@ -53,12 +53,9 @@ const PROJECTS: Project[] = [
     ],
     category: "DevOps",
     year: "2025",
-    github: "https://github.com/Sudhanshu-khosla-26",
-    demo: "",
-    metrics: [
-      { label: "Uptime", value: "99.9%" },
-      { label: "Deploy Speed", value: "70% faster" },
-    ],
+    github: "https://github.com/Sudhanshu-khosla-26/DeployHub",
+    demo: "https://drive.google.com/file/d/14nQwtORCnQ61i_-zThsVsaBCtsU3yEn5/view",
+    metrics: [{ label: "Uptime", value: "99.9%" }],
     featured: true,
     highlights: [
       "Real-time log tracking with Kafka and ClickHouse analytics",
@@ -87,6 +84,7 @@ const PROJECTS: Project[] = [
     category: "AI/ML",
     year: "2025",
     github: "https://github.com/Sudhanshu-khosla-26",
+    demo: "https://videotube-cyan.vercel.app/",
     metrics: [
       { label: "Match Accuracy", value: "85%" },
       { label: "Load Times", value: "Optimized" },
@@ -111,6 +109,7 @@ const PROJECTS: Project[] = [
     techStack: ["Next.js", "Framer Motion", "Tailwind CSS", "SEO"],
     category: "Full Stack",
     year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26/avinya_2025",
     demo: "https://avinya-2025-nu.vercel.app/",
     metrics: [
       { label: "Viewers", value: "1000+" },
@@ -146,6 +145,7 @@ const PROJECTS: Project[] = [
     category: "AI/ML",
     year: "2025",
     github: "https://github.com/Sudhanshu-khosla-26",
+    demo: "",
     metrics: [
       { label: "Manual Effort", value: "-60%" },
       { label: "Accuracy", value: "90%" },
@@ -171,6 +171,7 @@ const PROJECTS: Project[] = [
     category: "Automation",
     year: "2025",
     github: "https://github.com/Sudhanshu-khosla-26",
+    demo: "",
     metrics: [
       { label: "Efficiency", value: "+50%" },
       { label: "Daily Leads", value: "200+" },
@@ -202,6 +203,7 @@ const PROJECTS: Project[] = [
     category: "Full Stack",
     year: "2025",
     github: "https://github.com/Sudhanshu-khosla-26",
+    demo: "",
     metrics: [
       { label: "User Capacity", value: "5000+" },
       { label: "Stack", value: "MERN" },
@@ -226,6 +228,7 @@ const PROJECTS: Project[] = [
     techStack: ["Next.js", "Tailwind CSS", "Node.js"],
     category: "Full Stack",
     year: "2025",
+    github: "https://github.com/Sudhanshu-khosla-26/CodeZen",
     demo: "https://codezen-eight.vercel.app/",
     metrics: [
       { label: "Role", value: "Web Lead" },
@@ -252,7 +255,7 @@ const PROJECTS: Project[] = [
     category: "Full Stack",
     year: "2024",
     demo: "https://codezen-eight.vercel.app/",
-    github: "https://github.com/Sudhanshu-khosla-26",
+    github: "https://github.com/Sudhanshu-khosla-26/Netflix-clone-1.1",
     metrics: [
       { label: "API", value: "TMDB/YT" },
       { label: "UI", value: "Responsive" },

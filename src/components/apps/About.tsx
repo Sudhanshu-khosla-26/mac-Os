@@ -30,7 +30,7 @@ const SOCIAL_LINKS = [
 ];
 
 const STATS = [
-  { label: "Projects", value: "10+" },
+  { label: "Projects", value: "20+" },
   { label: "Internships", value: "2" },
   { label: "CGPA", value: "8.2" },
   { label: "Tech Stack", value: "20+" },
