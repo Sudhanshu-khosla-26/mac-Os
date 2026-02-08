@@ -1,73 +1,193 @@
-# React + TypeScript + Vite
+🖥️ macOS Portfolio OS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully interactive macOS-inspired portfolio website built with React, TypeScript, and Framer Motion.
+It simulates a real desktop environment where users can open apps, manage windows, and explore my work like a real operating system.
 
-Currently, two official plugins are available:
+Designed to showcase projects, skills, and experience through an immersive UI instead of a traditional portfolio.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✨ Features
+🪟 Window Manager
 
-## React Compiler
+Draggable & resizable windows
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Minimize / maximize / close
 
-## Expanding the ESLint configuration
+Focus & z-index stacking
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Mobile: auto-fullscreen apps
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+🧭 macOS-style Interface
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Menu bar with system actions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Dock with hover magnification
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Launchpad & Spotlight search
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Desktop icons
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+📱 Responsive OS
+
+Desktop → full macOS simulation
+
+Mobile → fullscreen app mode
+
+Smart dock behavior
+
+Touch-friendly UI
+
+🧑‍💻 Apps inside the OS
+
+About Me
+
+Projects
+
+Skills
+
+Experience
+
+Resume
+
+Gallery
+
+Terminal
+
+Camera
+
+Spotify
+
+YouTube
+
+🌙 Theming
+
+Light / dark mode
+
+Glassmorphism UI
+
+Smooth transitions
+
+🛠️ Tech Stack
+
+Frontend
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+Framer Motion
+
+Architecture
+
+Custom Window Manager
+
+Global event system
+
+Responsive OS layout
+
+Tooling
+
+Vite
+
+ESLint
+
+Prettier
+
+📦 Installation
+git clone https://github.com/yourusername/macos-portfolio.git
+cd macos-portfolio
+npm install
+npm run dev
+
+Build:
+
+npm run build
+npm run preview
+
+🧠 How it Works
+Window System
+
+Each app runs inside a managed window state:
+
+position
+
+size
+
+z-index
+
+minimized / maximized
+
+A global window manager hook controls all windows.
+
+Dock Logic
+
+Desktop: persistent dock
+
+Mobile: overlay dock
+
+Hover magnification
+
+Active app indicators
+
+Menu Bar
+
+Desktop: full macOS menu
+
+Mobile: simplified status bar
+
+📁 Project Structure
+src/
+├─ components/
+│ ├─ apps/
+│ ├─ Dock.tsx
+│ ├─ Window.tsx
+│ ├─ MenuBar.tsx
+│ └─ Desktop.tsx
+│
+├─ hooks/
+│ ├─ useWindowManager.ts
+│ ├─ useTheme.ts
+│ └─ useSpotlight.ts
+│
+├─ App.tsx
+└─ main.tsx
+
+🎯 Purpose
+
+This project was built to:
+
+Showcase full-stack skills
+
+Demonstrate UI engineering depth
+
+Create a memorable portfolio experience
+
+Push React beyond typical dashboards
+
+🚀 Future Improvements
+
+iOS control center
+
+File system simulation
+
+Terminal commands
+
+Drag-drop files
+
+Real app persistence
+
+Multiplayer desktop
+
+👨‍💻 Author
+
+Sudhanshu Khosla
+Full Stack Developer
+
+GitHub: https://github.com/Sudhanshu-khosla-26
+
+LinkedIn: https://linkedin.com/in/sudhanshu-khosla-a05b4a298
+
+Email: work.sudhanshukhosla@gmail.com
+
+⭐ If you like this project
