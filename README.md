@@ -1,193 +1,88 @@
-🖥️ macOS Portfolio OS
+# 🖥️ macOS Portfolio OS
 
-A fully interactive macOS-inspired portfolio website built with React, TypeScript, and Framer Motion.
-It simulates a real desktop environment where users can open apps, manage windows, and explore my work like a real operating system.
+> An interactive macOS-inspired portfolio that runs like a real operating system in your browser.
 
-Designed to showcase projects, skills, and experience through an immersive UI instead of a traditional portfolio.
+[![Live Demo](https://img.shields.io/badge/demo-live-green.svg)](https://www.sudhanshukhosla.in/)
+[![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
 
-✨ Features
-🪟 Window Manager
+![Screenshot](./Screenshot.png)
 
-Draggable & resizable windows
+## 🚀 Features
 
-Minimize / maximize / close
+- **🪟 Full Window Management** - Drag, resize, minimize, and maximize windows
+- **🎨 macOS UI** - Menu bar, Dock with magnification, Spotlight search, Launchpad
+- **📱 Fully Responsive** - Adapts from desktop OS to mobile fullscreen apps
+- **🌓 Theme Support** - Light/dark mode with glassmorphism effects
+- **⚡ Smooth Animations** - Powered by Framer Motion
 
-Focus & z-index stacking
+## 🛠️ Built With
 
-Mobile: auto-fullscreen apps
+- **React** + **TypeScript** - Component architecture
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **Vite** - Build tool
 
-🧭 macOS-style Interface
+## 📦 Quick Start
 
-Menu bar with system actions
-
-Dock with hover magnification
-
-Launchpad & Spotlight search
-
-Desktop icons
-
-📱 Responsive OS
-
-Desktop → full macOS simulation
-
-Mobile → fullscreen app mode
-
-Smart dock behavior
-
-Touch-friendly UI
-
-🧑‍💻 Apps inside the OS
-
-About Me
-
-Projects
-
-Skills
-
-Experience
-
-Resume
-
-Gallery
-
-Terminal
-
-Camera
-
-Spotify
-
-YouTube
-
-🌙 Theming
-
-Light / dark mode
-
-Glassmorphism UI
-
-Smooth transitions
-
-🛠️ Tech Stack
-
-Frontend
-
-React
-
-TypeScript
-
-Tailwind CSS
-
-Framer Motion
-
-Architecture
-
-Custom Window Manager
-
-Global event system
-
-Responsive OS layout
-
-Tooling
-
-Vite
-
-ESLint
-
-Prettier
-
-📦 Installation
-git clone https://github.com/yourusername/macos-portfolio.git
+```bash
+git clone https://github.com/Sudhanshu-khosla-26/macos-portfolio.git
 cd macos-portfolio
 npm install
 npm run dev
+```
 
-Build:
+## 📱 Apps Included
 
-npm run build
-npm run preview
+About Me • Projects • Skills • Experience • Resume • Gallery • Terminal • Camera • Spotify • YouTube
 
-🧠 How it Works
-Window System
+## 🏗️ Architecture
 
-Each app runs inside a managed window state:
-
-position
-
-size
-
-z-index
-
-minimized / maximized
-
-A global window manager hook controls all windows.
-
-Dock Logic
-
-Desktop: persistent dock
-
-Mobile: overlay dock
-
-Hover magnification
-
-Active app indicators
-
-Menu Bar
-
-Desktop: full macOS menu
-
-Mobile: simplified status bar
-
-📁 Project Structure
+```
 src/
-├─ components/
-│ ├─ apps/
-│ ├─ Dock.tsx
-│ ├─ Window.tsx
-│ ├─ MenuBar.tsx
-│ └─ Desktop.tsx
-│
-├─ hooks/
-│ ├─ useWindowManager.ts
-│ ├─ useTheme.ts
-│ └─ useSpotlight.ts
-│
-├─ App.tsx
-└─ main.tsx
+├── components/
+│   ├── apps/          # Individual app components
+│   ├── Dock.tsx       # Bottom dock
+│   ├── Window.tsx     # Window wrapper
+│   ├── MenuBar.tsx    # Top menu
+│   └── Desktop.tsx    # Main desktop
+├── hooks/
+│   ├── useWindowManager.ts
+│   ├── useTheme.ts
+│   └── useSpotlight.ts
+└── App.tsx
+```
 
-🎯 Purpose
+## 💡 How It Works
 
-This project was built to:
+Each app runs in a managed window with:
 
-Showcase full-stack skills
+- Position & size state
+- Z-index stacking
+- Minimize/maximize logic
+- Mobile auto-fullscreen
 
-Demonstrate UI engineering depth
+The `useWindowManager` hook controls all window operations globally.
 
-Create a memorable portfolio experience
+## 🎯 Roadmap
 
-Push React beyond typical dashboards
+- [ ] File system simulation
+- [ ] Terminal commands
+- [ ] Drag & drop files
+- [ ] State persistence
 
-🚀 Future Improvements
+## 👨‍💻 Author
 
-iOS control center
+**Sudhanshu Khosla**
 
-File system simulation
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=flat&logo=github&logoColor=white)](https://github.com/Sudhanshu-khosla-26)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/sudhanshu-khosla-a05b4a298)
+[![Email](https://img.shields.io/badge/Email-D14836?style=flat&logo=gmail&logoColor=white)](mailto:work.sudhanshukhosla@gmail.com)
 
-Terminal commands
+## 📄 License
 
-Drag-drop files
+MIT © Sudhanshu Khosla
 
-Real app persistence
+---
 
-Multiplayer desktop
-
-👨‍💻 Author
-
-Sudhanshu Khosla
-Full Stack Developer
-
-GitHub: https://github.com/Sudhanshu-khosla-26
-
-LinkedIn: https://linkedin.com/in/sudhanshu-khosla-a05b4a298
-
-Email: work.sudhanshukhosla@gmail.com
-
-⭐ If you like this project
+⭐ **Star this repo** if you found it interesting!
