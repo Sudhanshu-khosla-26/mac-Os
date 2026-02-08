@@ -6,7 +6,7 @@
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
 
-![Screenshot](./Screenshot.png)
+![Screenshot](/public/Screenshot.png)
 
 ## 🚀 Features
 
