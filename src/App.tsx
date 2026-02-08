@@ -25,6 +25,7 @@ import {
 import { useWindowManager } from "@/hooks/useWindowManager";
 import { useSpotlight } from "@/hooks/useSpotlight";
 import { useTheme } from "@/hooks/useTheme";
+import { useWallpaper } from "@/hooks/useWallpaper";
 
 // Desktop icons configuration
 const DESKTOP_ICONS = [
@@ -73,6 +74,15 @@ function App() {
     updateWindowPosition,
     updateWindowSize,
   } = useWindowManager();
+
+  const {
+    wallpapers,
+    selectedWallpaper,
+    setSelectedWallpaper,
+    getBackgroundStyle,
+    addCustomWallpaper,
+    solidColors,
+  } = useWallpaper();
 
   const { isDark, toggleTheme } = useTheme();
 
@@ -348,7 +358,18 @@ function App() {
         case "resume":
           return <Resume isDark={isDark} />;
         case "settings":
-          return <Settings isDark={isDark} onToggleTheme={toggleTheme} />;
+          return (
+            <Settings
+              isDark={isDark}
+              onToggleTheme={toggleTheme}
+              wallpapers={wallpapers}
+              selectedWallpaper={selectedWallpaper}
+              onSelectWallpaper={setSelectedWallpaper}
+              onAddCustomWallpaper={addCustomWallpaper}
+              solidColors={solidColors}
+              deviceType={deviceType}
+            />
+          );
         case "spotify":
           return <Spotify isDark={isDark} />;
         case "youtube":
@@ -365,24 +386,21 @@ function App() {
           );
       }
     },
-    [isDark, toggleTheme], // Only re-create when these change
+    [
+      isDark,
+      toggleTheme,
+      wallpapers,
+      selectedWallpaper,
+      setSelectedWallpaper,
+      addCustomWallpaper,
+      solidColors,
+    ], // Only re-create when these change
   );
 
   return (
     <div
       className="h-screen w-screen overflow-hidden fixed inset-0 touch-none"
-      style={{
-        backgroundImage: `url('${
-          deviceType === "mobile"
-            ? "/download2.jfif"
-            : deviceType === "tablet"
-              ? "/download5.jfif"
-              : "/macbook-m3.jpg"
-        }')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      style={getBackgroundStyle(deviceType)}
     >
       {/* Wallpaper Overlay */}
       <div

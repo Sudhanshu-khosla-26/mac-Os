@@ -315,10 +315,37 @@ export function useWindowManager() {
     [],
   );
 
+  // const updateWindowSize = useCallback(
+  //   (windowId: string, size: { width: number; height: number }) => {
+  //     setWindows((prev) =>
+  //       prev.map((w) => (w.id === windowId ? { ...w, size } : w)),
+  //     );
+  //   },
+  //   [],
+  // );
+
   const updateWindowSize = useCallback(
     (windowId: string, size: { width: number; height: number }) => {
       setWindows((prev) =>
-        prev.map((w) => (w.id === windowId ? { ...w, size } : w)),
+        prev.map((w) => {
+          if (w.id !== windowId) return w;
+
+          const screenWidth = window.innerWidth;
+          const screenHeight = window.innerHeight;
+          const dockHeight = 80;
+
+          const maxX = screenWidth - size.width;
+          const maxY = screenHeight - dockHeight - size.height;
+
+          return {
+            ...w,
+            size,
+            position: {
+              x: Math.min(w.position.x, maxX),
+              y: Math.min(w.position.y, maxY),
+            },
+          };
+        }),
       );
     },
     [],

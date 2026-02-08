@@ -81,11 +81,29 @@ export function Window({
       if (isDragging) {
         const deltaX = e.clientX - dragStart.current.x;
         const deltaY = e.clientY - dragStart.current.y;
+
+        const newX = dragStart.current.windowX + deltaX;
+        const newY = dragStart.current.windowY + deltaY;
+
+        const menuBarHeight = 28;
+        const dockHeight = 90;
+        const padding = 6;
+
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        const maxX = screenWidth - win.size.width - padding;
+        const maxY = screenHeight - dockHeight - win.size.height;
+
+        const minX = padding;
+        const minY = menuBarHeight;
+
         onPositionChange({
-          x: Math.max(0, dragStart.current.windowX + deltaX),
-          y: Math.max(28, dragStart.current.windowY + deltaY),
+          x: Math.min(Math.max(newX, minX), maxX),
+          y: Math.min(Math.max(newY, minY), maxY),
         });
       }
+
       if (isResizing) {
         const deltaX = e.clientX - resizeStart.current.x;
         const deltaY = e.clientY - resizeStart.current.y;
